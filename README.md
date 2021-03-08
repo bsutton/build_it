@@ -56,7 +56,7 @@ format:
 
 The format of the input configuration (used models) specified in the following file:  
 
-[https://github.com/mezoni/build_it/lib/src/specifications/json_serializable.yaml](https://github.com/mezoni/build_it/lib/src/specifications/json_serializable.yaml)  
+[https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml](https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml)  
 
 The `JsonObjects` model is used as the root model, which is used as the configuration.  
 
