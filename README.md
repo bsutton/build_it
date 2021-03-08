@@ -39,7 +39,7 @@ Each object describes a piece of configuration.
 The root object describes the configuration.  
 By convention, one of the models is used as a description of the configuration.  
 
-For example, for generator `JsonSerializable`, the `JsonObject` model is the root model that describes the configuration for that generator.  
+For example, for generator `JsonSerializable`, the `JsonObjects` model is the root model that describes the configuration for that generator.  
 
 ## Generator `JsonSerializable`
 
