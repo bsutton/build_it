@@ -1,0 +1,60 @@
+---
+format:
+  name: build_it
+  generator:
+    name: JsonSerializable
+---
+
+jsonObjects:
+- name: JsonObject
+  comments: "JsonObject is used to describe the JSON object"
+  properties:
+  - name: annotations
+    type: List<String>?
+    comments: "Metadata describing the JSON object"
+  - name: comments
+    type: String?
+    comments: "Documenting comments for JSON object"
+  - name: immutable
+    type: bool?
+    comments: "Indicates whether JSON object is immutable or not"
+  - name: name
+    type: String?
+    comments: "JSON object name"
+  - name: properties
+    type: List<Property>?
+    comments: "List of JSON object properties"
+
+- name: JsonObjects
+  comments: "JsonObjects is used to describe the collection of JSON objects"
+  properties:
+  - name: exports
+    type: List<String>?
+    comments: "List of used export directives"
+  - name: immutable
+    type: bool?
+    comments: "Indicates whether JSON objects is immutable or not"
+  - name: imports
+    type: List<String>?
+    comments: "List of used import directives"
+  - name: jsonObjects
+    type: List<JsonObject>?
+    comments: "List of JSON objects"
+  - name: parts
+    type: List<String>?
+    comments: "List of used part directives"
+
+- name: Property
+  properties:
+  - name: annotations
+    type: List<String>?
+    comments: "Metadata describing the JSON object property"
+  - name: comments
+    type: String?
+    comments: "Documenting comments for JSON object property"
+  - name: name
+    type: String?
+    comments: "JSON object property name"
+  - name: type
+    type: String?
+    comments: "JSON object property type"

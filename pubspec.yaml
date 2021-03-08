@@ -1,0 +1,19 @@
+name: build_it
+version: 0.1.0
+description: The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code, doing the chores for you.
+homepage: https://github.com/mezoni/build_it
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+dependencies:  
+  build: any
+  build_runner: any
+  code_builder: ^3.6.0
+  dart_style: ^1.3.12
+  json_annotation: ^4.0.0
+  json_serializable: ^4.0.2
+  meta: ^1.3.0
+  path: ^1.8.0  
+  yaml: ^3.0.0
+dev_dependencies:  
+  pedantic: ^1.11.0
+  test: ^1.16.5

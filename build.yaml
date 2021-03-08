@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      build_it:
+        enabled: true
+
+builders:
+  build_it:
+    target: ":build_it"
+    import: "package:build_it/build_it_builder.dart"
+    builder_factories: ["buildItBuilder"]
+    build_extensions: {".yaml": [".g.dart"]}
+    auto_apply: dependents
+    #build_to: cache
+    build_to: source
