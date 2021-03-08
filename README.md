@@ -1,12 +1,12 @@
 # build_it
 
-The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code, doing the chores for you.    
+The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code, doing the chores for you.  
 
-Version 0.1.0
+Version 0.1.1  
 
-The current list of generators includes:
+The current list of generators includes:  
 
-- JsonSerializable
+- JsonSerializable  
 
 ## File format
 
@@ -214,4 +214,10 @@ class User {
 
 ```
 
-To be continued...
+## How to avoid bulld conflicts
+
+The only way to avoid build conflicts is to not create a Dart file with the same name as the configuration file.  
+For example, if you are using a configuration file named `my_models.yaml`, then do not create a file called `my_models.dart`.  
+The reason for the possible conflict may be that if the file `my_models.dart` will generate the file` my_models.g.dart`, then there will be a build conflict.  
+
+To be continued...  

@@ -1,5 +1,5 @@
 name: build_it
-version: 0.1.0
+version: 0.1.1
 description: The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code, doing the chores for you.
 homepage: https://github.com/mezoni/build_it
 environment:
