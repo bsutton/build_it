@@ -5,14 +5,17 @@ import 'package:build_it/build_it_generator.dart';
 import 'package:build_it/src/generators.dart';
 import 'package:dart_style/dart_style.dart';
 
+/// Build It factory
 Builder buildItBuilder(BuilderOptions options) => BuildItBuilder();
 
+/// Build class, used to build new files from existing ones.
 class BuildItBuilder implements Builder {
   @override
   final buildExtensions = const {
     '.yaml': ['.g.dart']
   };
 
+  /// Generates the outputs for a given "build_it" inputs.
   @override
   Future build(BuildStep buildStep) async {
     final outputId = buildStep.inputId.changeExtension('.g.dart');

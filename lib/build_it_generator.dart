@@ -10,16 +10,21 @@ import 'package:yaml/yaml.dart' as _yaml;
 
 import 'src/json_serializable_generator.dart';
 
+/// Main "build_it" file generator
 class BuildItGenerator extends Generator with PartGenererator {
+  /// Input file path
   final String input;
 
+  /// Output file path
   final String output;
 
+  /// Input file content
   final String source;
 
   BuildItGenerator(
       {@required this.input, @required this.output, @required this.source});
 
+  /// Generates source code for the output file
   @override
   String generate(StageBuilder builder) {
     final yamlDocuments = _yaml.loadYamlDocuments(source);
