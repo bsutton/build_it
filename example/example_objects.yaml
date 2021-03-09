@@ -1,0 +1,18 @@
+---
+format:
+  name: build_it
+  generator:
+    name: JsonSerializable
+---
+
+jsonObjects:
+- name: Category
+  properties:
+  - { name: id, type: int }
+  - { name: name, type: String }
+  - { name: products, type: List<Product> }
+
+- name: Product
+  properties:
+  - { name: id, type: int }
+  - { name: name, type: String }

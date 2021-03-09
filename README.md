@@ -1,20 +1,19 @@
 # build_it
 
-The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code, doing the chores for you.  
+The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code.
 
-Version 0.1.1  
+Version 0.1.1
 
 The current list of generators includes:  
-
 - JsonSerializable  
 
 ## File format
 
 Input configuration files must be in the `build_it` format.  
 This is a non-existent format (don't try to find a description). This format is only intended to be able to identify data in this format.  
-This format is very simple. The data format is `YAML`. You just need to specify the correct YAML `metadata section` in a certain way.  
+This format is very simple. The data format is `YAML`. You just need to specify the correct YAML `metadata section` in a certain way.
 
-The header format (YAML `metadata section`) is shown below.  
+The header format (YAML `metadata section`) is shown below.
 
 ```yaml
 ---
@@ -37,13 +36,13 @@ A format specification is a collection of models.
 An object is an instance of a model.  
 Each object describes a piece of configuration.  
 The root object describes the configuration.  
-By convention, one of the models is used as a description of the configuration.  
+By convention, one of the models is used as a description of the configuration.
 
-For example, for generator `JsonSerializable`, the `JsonObjects` model is the root model that describes the configuration for that generator.  
+For example, for generator `JsonSerializable`, the `JsonObjects` model is the root model that describes the configuration for that generator.
 
 ## Generator `JsonSerializable`
 
-The header format for the `JsonSerializable` generator:  
+The header format for the `JsonSerializable` generator:
 
 ```yaml
 ---
@@ -54,11 +53,11 @@ format:
 ---
 ```
 
-The format of the input configuration (used models) specified in the following file:  
+The format of the input configuration (used models) specified in the following file:
 
 [https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml](https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml)  
 
-The `JsonObjects` model is used as the root model, which is used as the configuration.  
+The `JsonObjects` model is used as the root model, which is used as the configuration.
 
 ```yaml
 ---
@@ -126,7 +125,7 @@ jsonObjects:
 
 An example of the input configuration:
 
-`shop_objects.yaml`
+`example_objects.yaml`
 
 ```yaml
 ---
@@ -136,81 +135,108 @@ format:
     name: JsonSerializable
 ---
 
-immutable: true
 jsonObjects:
-- name: Product
-  comments: "Product model"
+- name: Category
   properties:
-  - { name: id, type: int? }
-  - { name: name, type: String? }
-  - { name: retailPrice, type: double? }
+  - { name: id, type: int }
+  - { name: name, type: String }
+  - { name: products, type: List<Product> }
 
-- name: User
-  immutable: false
-  comments: "User model"
+- name: Product
   properties:
-  - { name: email, type: String? }
-  - { name: id, type: int? }
-  - { name: name, type: String? }
-  - name: password
-    type: String
-    comments: "Password property"
+  - { name: id, type: int }
+  - { name: name, type: String }
 ```
 
 An example of the generated code:
 
-`shop_objects.g.dart`
+`example_objects.g.dart`
 
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'shop_objects.g.g.dart';
+part 'example_objects.g.g.dart';
 
 // **************************************************************************
 // build_it: JsonSerializable
 // **************************************************************************
 
-/// Product model
+@JsonSerializable()
+class Category {
+  Category({required this.id, required this.name, required this.products});
+
+  /// Creates an object from a JSON representation
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
+
+  int id;
+
+  String name;
+
+  List<Product> products;
+
+  /// Returns a JSON representation of the object
+  Map<String, dynamic> toJson() => _$CategoryToJson(this);
+}
+
 @JsonSerializable()
 class Product {
-  Product({this.id, this.name, this.retailPrice});
+  Product({required this.id, required this.name});
 
   /// Creates an object from a JSON representation
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 
-  final int? id;
+  int id;
 
-  final String? name;
-
-  final double? retailPrice;
+  String name;
 
   /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 }
 
-/// User model
-@JsonSerializable()
-class User {
-  User({this.email, this.id, this.name, required this.password});
+```
 
-  /// Creates an object from a JSON representation
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+Example of using generated code:
 
-  String? email;
+```dart
+import 'example_objects.g.dart';
 
-  int? id;
-
-  String? name;
-
-  /// Password property
-  String password;
-
-  /// Returns a JSON representation of the object
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+void main() {
+  final categories = _json.map((e) => Category.fromJson(e));
+  for (final category in categories) {
+    print('Category: ${category.name}');
+    for (final product in category.products) {
+      print('  Product: ${product.name}');
+    }
+  }
 }
+
+final _json = [
+  {
+    'id': 1,
+    'name': 'Intel CPU',
+    'products': [
+      {'id': 1, 'name': 'Celeron'},
+      {'id': 1, 'name': 'Pentium'},
+      {'id': 1, 'name': 'Core i3'},
+      {'id': 1, 'name': 'Core i5'},
+      {'id': 1, 'name': 'Core i7'},
+    ]
+  },
+  {
+    'id': 2,
+    'name': 'AMD CPU',
+    'products': [
+      {'id': 1, 'name': 'Sempron'},
+      {'id': 1, 'name': 'Athlon'},
+      {'id': 1, 'name': 'Phenom'},
+      {'id': 1, 'name': 'Opteron'},
+    ]
+  }
+];
 
 ```
 
@@ -218,6 +244,6 @@ class User {
 
 The only way to avoid build conflicts is to not create a Dart file with the same name as the configuration file.  
 For example, if you are using a configuration file named `my_models.yaml`, then do not create a file called `my_models.dart`.  
-The reason for the possible conflict may be that if the file `my_models.dart` will generate the file` my_models.g.dart`, then there will be a build conflict.  
+The reason for the possible conflict may be that if the file `my_models.dart` will generate the file` my_models.g.dart`, then there will be a build conflict.
 
 To be continued...  
