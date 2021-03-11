@@ -8,11 +8,12 @@ part of 'example_objects.g.dart';
 
 Category _$CategoryFromJson(Map<String, dynamic> json) {
   return Category(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    products: (json['products'] as List<dynamic>)
-        .map((e) => Product.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    id: json['id'] as int?,
+    name: json['name'] as String?,
+    products: (json['products'] as List<dynamic>?)
+            ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
   );
 }
 
@@ -24,8 +25,8 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
 
 Product _$ProductFromJson(Map<String, dynamic> json) {
   return Product(
-    id: json['id'] as int,
-    name: json['name'] as String,
+    id: json['id'] as int?,
+    name: json['name'] as String?,
   );
 }
 
