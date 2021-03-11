@@ -1,8 +1,12 @@
 # build_it
 
-The `build it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
+The `build_it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
-Version 0.2.1 (BETA)
+Version 0.2.2 (BETA)
+
+TODO:
+- Improvement of the built-in JSON generator for safe use generated JSON objects with non-nullable runtime environment
+- Improving the built-in JSON generator by adding unimplemented functionality
 
 ## What are the principles of work?
 
@@ -38,6 +42,7 @@ format:
   name: build_it
   generator:
     name: string
+    options: any?
   language:
     version: string?
 ---
@@ -178,7 +183,12 @@ void main() {
 ```
 
 Yes, it’s not impressive, but we didn't put much effort into it.  
-A good generator should have a format specification and use JSON models to work with the configuration.
+It is best to use the package [https://pub.dev/packages/code_builder](code_builder).  
+Another way is to use a template engine (for example, [https://pub.dev/packages/mustache](mustache)).  
+
+A good generator should have a format specification and use JSON models to work with the configuration.  
+Package `build_it` offers a built-in JSON generator. This generator will be improved soon. You can use it to generate JSON models for your generator.
+
 
 ## Built-in JSON generator
 
@@ -286,5 +296,15 @@ This applies to all generators intended to use with `build_it` builder.
 The only way to avoid build conflicts is to not create a Dart file with the same name as the configuration file.  
 For example, if you are using a configuration file named `my_models.yaml`, then do not create a file called `my_models.dart`.  
 The reason for the possible conflict may be that if the file `my_models.dart` will generate the file` my_models.g.dart`, then there will be a build conflict.
+
+## How to debug generator?
+
+If you need to debug the process of work 'build_it', then you can read the answer here:  
+
+[https://github.com/dart-lang/build/blob/master/docs/builder_author_faq.md#how-can-i-debug-my-builder](How can I debug my builder?)
+
+But if you need to debug your code generator, then it is easier to do so:  
+Move the generator functionality into a separate class and debug it in the usual way.  
+The builder 'build_it' runs the generator in a separate isolate, this debugging is not very convenient.
 
 To be continued...  

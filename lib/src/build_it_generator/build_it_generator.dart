@@ -190,7 +190,7 @@ class BuildItGenerator {
 
   String _getErrorMessage(String message, context) {
     final sb = StringBuffer();
-    sb.writeln('The \'build_it\' process error');
+    sb.writeln('The \'build_it\' processing error');
     sb.writeln(message);
     if (context.generatorName != null) {
       sb.write('Generator: ');
@@ -344,8 +344,8 @@ class BuildItGenerator {
     } catch (e) {
       cloaseAllPorts();
       completer.complete();
-      final message = _getErrorMessage(
-          'An exception was thrown during generator execution', context);
+      final message =
+          _getErrorMessage('Isolate spawning exception occurred', context);
       stderr.writeln(message);
       rethrow;
     }
