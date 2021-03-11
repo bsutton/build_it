@@ -2,7 +2,7 @@
 
 The `build it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
-Version 0.2.0 (BETA)
+Version 0.2.1 (BETA)
 
 ## What are the principles of work?
 

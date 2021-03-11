@@ -25,11 +25,10 @@ Future<void> main(List<String> args, [response]) async {
     throw StateError('Unexpected configuration data type: ${data.runtimeType}');
   }
 
-  final name = data['name'];
+  final name = data['name'] as String;
   final code = <String>[];
-  code.add('main() {');
-  code.add('stdout.writeln("Hello, $name!");');
-  code.add('}');
+  final template = _template.replaceAll('{{NAME}}', name);
+  code.add(template);
 
   final directives = <Directive>[];
   directives.add(Directive(type: 'import', url: 'dart:io'));
@@ -37,3 +36,9 @@ Future<void> main(List<String> args, [response]) async {
   final result = BuildResult(code: code.join('\n'), directives: directives);
   response.send(jsonEncode(result.toJson()));
 }
+
+const _template = '''
+void main() {
+  stdout.writeln('Hello, {{NAME}}');
+}
+''';
