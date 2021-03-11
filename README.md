@@ -1,6 +1,6 @@
 # build_it
 
-The `build_it`is a builder that runs third-party source code generators for rapid development.
+The `build it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
 Version 0.2.0 (BETA)
 
@@ -11,6 +11,17 @@ The `build_it` builder simplifies several development steps at once:
 - Allows you to easily use your own generator without delving too much into the principles of the build process (generate whatever you want)  
 - You can use your own data description format to configure your generator in YAML format (it is recommended to use JSON models for this purpose)  
 - You can use third-party source code generators for rapid development, you just need to know the configuration description format (and what they end up creating)  
+
+## How do generators become publicly available?
+
+Create a file named `your_generator_name_build_it.dart`.  
+That is, add `_build_it.dart` at the end of the generator file name.  
+Your generator will be available to anyone who adds dependencies to your package.  
+The generator will be available with the name `your_package_name:generator_name`.  
+Or, if your generator has the same name as your package, then its alias (the short name) will be `your_package_name`.  
+
+If necessary, you can hide it away in your package.  
+Eg. `src/foo/bar/baz_build_it.dart`
 
 ## File format
 
@@ -44,19 +55,11 @@ That is, you describe the configuration in the `YAML` format according to the sp
 
 ## How to implement your own `build_it` generator?
 
-Notice:
-Please remember that your generator will be available to anyone who adds dependencies to your package.  
-The generator will be available with the name `your_package_name:generator_name`.  
-Or, if your generator has the same name as your package, then its alias (the short name) will be `your_package_name`.  
-Please don't forget this.  
-If necessary, you can hide it away in your package.  
-Eg. `src/foo/bar/baz_build_it.dart`
-
-Let's go.  
-
 First, add a dependency to the `pubspec.yaml` file:
 
 ```yaml
+dependencies:
+  # Don't forget about other runtime dependencies, eg. `json_annotation`
 dev_dependencies:
   build: ^1.6.2
   build_it: ^0.2.0
@@ -67,7 +70,7 @@ Suppose you want to create a generator named `foo`.
 
 Create a file named `foo_build_it.dart` in the` lib` folder. 
 
-Add the following directive (for data exchange):
+Add the following directive (for data exchange with the builder):
 
 ```dart
 import 'package:build_it/build_it_models.dart';
@@ -149,7 +152,7 @@ name: "Jack"
 ```
 
 We will assume that your package is named `build_it_test`.   
-Accordingly, the name of the generator is `build_it_test:foo`.  
+Accordingly, the public available name of your generator is `build_it_test:foo`.  
 
 Everything is ready, you can start the build process:
 
@@ -182,7 +185,7 @@ A good generator should have a format specification and use JSON models to work 
 For a generator to work well, a specification is required to describe the configuration and to work with the configuration.  
 JSON objects are very well suited for this purpose. They are convenient for modeling and data processing.  
 It is not very pleasant to write such objects by hand, it is a common routine work.  
-Using the `json` generator from the` build_it` package can make this work a little easier.  
+Using the `json` generator from the` build_it` package can make this work a little easier.
 
 Example of configuration for this generator:
 
@@ -260,7 +263,7 @@ class Product {
 
 ```
 
-This generator is an example of how and what kind of generator can be written and used with the `build_it` builder.  
+This generator is an example of how and what kind of public generators can be written and used with the `build_it` builder.  
 If you add the following dependencies to your project, then this generator will be available in your project as well.
 
 ```yaml
@@ -274,8 +277,9 @@ dev_dependencies:
 ```
 
 Now everyone who adds dependencies will have access to this generator.  
-This way everyone can easily create shared and useful generators for everyone.  
-This applies to all generators for `build_it`.
+
+This way everyone can easily create useful public generators for everyone.  
+This applies to all generators intended to use with `build_it` builder.
 
 ## How to avoid bulld conflicts?
 
