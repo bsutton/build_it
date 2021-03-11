@@ -2,7 +2,7 @@
 
 The `build_it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
-Version 0.2.2 (BETA)
+Version 0.2.3 (BETA)
 
 TODO:
 - Improvements to the `build_it` generator error reporting system
@@ -190,8 +190,8 @@ void main() {
 ```
 
 Yes, it’s not impressive, but we didn't put much effort into it.  
-It is best to use the package [https://pub.dev/packages/code_builder](code_builder).  
-Another way is to use a template engine (for example, [https://pub.dev/packages/mustache](mustache)).  
+It is best to use the package [code_builder](https://pub.dev/packages/code_builder).  
+Another way is to use a template engine (for example, [mustache](https://pub.dev/packages/mustache)).  
 
 A good generator should have a format specification and use JSON models to work with the configuration.  
 Package `build_it` offers a built-in JSON generator. This generator will be improved soon. You can use it to generate JSON models for your generator.
@@ -200,11 +200,11 @@ Package `build_it` offers a built-in JSON generator. This generator will be impr
 ## Built-in JSON generator
 
 For a generator to work well, a specification is required to describe the configuration and to work with the configuration.  
-JSON objects are very well suited for this purpose. They are convenient for modeling and data processing.  
+`JSON` objects are very well suited for this purpose. They are convenient for modeling and data processing.  
 It is not very pleasant to write such objects by hand, it is a common routine work.  
 Using the `json` generator from the` build_it` package can make this work a little easier.
 
-Example of configuration for this generator:
+Example of configuration for `JSON` generator:
 
 `example_objects.yaml`
 
@@ -216,17 +216,19 @@ format:
     name: build_it:json
 ---
 
+checkNullSafety: true
+
 jsonObjects:
 - name: Category
   properties:
-  - { name: id, type: int }
-  - { name: name, type: String }
-  - { name: products, type: List<Product> }
+  - { name: id, type: int? }
+  - { name: name, type: String? }
+  - { name: products, type: List<Product>, defaultValue: [] }
 
 - name: Product
   properties:
-  - { name: id, type: int }
-  - { name: name, type: String }
+  - { name: id, type: int? }
+  - { name: name, type: String? }
 ```
 
 The result of work:
@@ -241,21 +243,22 @@ import 'package:json_annotation/json_annotation.dart';
 part 'example_objects.g.g.dart';
 
 // **************************************************************************
-// build_it: JsonSerializable
+// build_it: build_it:json
 // **************************************************************************
 
 @JsonSerializable()
 class Category {
-  Category({required this.id, required this.name, required this.products});
+  Category({this.id, this.name, required this.products});
 
   /// Creates an object from a JSON representation
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
 
-  int id;
+  int? id;
 
-  String name;
+  String? name;
 
+  @JsonKey(defaultValue: [])
   List<Product> products;
 
   /// Returns a JSON representation of the object
@@ -264,15 +267,15 @@ class Category {
 
 @JsonSerializable()
 class Product {
-  Product({required this.id, required this.name});
+  Product({this.id, this.name});
 
   /// Creates an object from a JSON representation
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 
-  int id;
+  int? id;
 
-  String name;
+  String? name;
 
   /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$ProductToJson(this);

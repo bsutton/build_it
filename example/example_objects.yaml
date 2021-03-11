@@ -4,7 +4,9 @@ format:
   generator:
     name: build_it:json
 ---
+
 checkNullSafety: true
+
 jsonObjects:
 - name: Category
   properties:
