@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Fixed bug with `Uri` schema `file` when working with `.packages` file.
+
+
 ## 0.2.0
 
 - Breaking changes and new features

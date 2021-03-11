@@ -48,7 +48,7 @@ format:
 ## How to use
 
 The `build_it` builder directly executes third-party (or your own) generators for you.  
-The builder executes thеse generators that generates ready-to-use files (or files for other builders or generators).  
+The builder executes thеse generators that generates ready-to-use source code (or source code for other builders or generators).  
 The configurations for generators are described in the `YAML` format.  
 Configurations are based on specifications.  
 That is, you describe the configuration in the `YAML` format according to the specification. Because the target generator will use this configuration for its work.

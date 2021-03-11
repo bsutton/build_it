@@ -87,7 +87,9 @@ class BuildItGenerator {
 
       final packagePath = packages[packageName].trim();
       final generatorUrl = generatorAlias + '_build_it.dart';
-      final filepath = _path.join(packagePath, generatorUrl);
+      var filepath = _path.join(packagePath, generatorUrl);
+      final isWindows = Platform.isWindows;
+      filepath = Uri.parse(filepath).toFilePath(windows: isWindows);
       final file = File(filepath);
       if (!file.existsSync()) {
         _error('Unable to find the generator file \'$generatorUrl\'', context);
