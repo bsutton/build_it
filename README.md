@@ -1,129 +1,190 @@
 # build_it
 
-The `build_it` is a builder that representing various types of generators that mainly generate code for other generators (and builders), or generates ready-to-use code.
+The `build_it`is a builder that runs third-party source code generators for rapid development.
 
-Version 0.1.1
+Version 0.2.0 (BETA)
 
-The current list of generators includes:  
-- JsonSerializable  
+## What are the principles of work?
+
+The `build_it` builder simplifies several development steps at once:
+
+- Allows you to easily use your own generator without delving too much into the principles of the build process (generate whatever you want)  
+- You can use your own data description format to configure your generator in YAML format (it is recommended to use JSON models for this purpose)  
+- You can use third-party source code generators for rapid development, you just need to know the configuration description format (and what they end up creating)  
 
 ## File format
 
 Input configuration files must be in the `build_it` format.  
 This is a non-existent format (don't try to find a description). This format is only intended to be able to identify data in this format.  
-This format is very simple. The data format is `YAML`. You just need to specify the correct YAML `metadata section` in a certain way.
+This format is very simple. The data format is `YAML`.  
+You just need to specify the correct YAML `metadata section` in a certain way.
 
 The header format (YAML `metadata section`) is shown below.
 
 ```yaml
 ---
 format:
-  type: build_it
+  name: build_it
+  generator:
+    name: string
+  language:
+    version: string?
 ---
+
+# Configuration goes here
 ```
 
 ## How to use
 
-The `build_it` builder does not directly launch third-party generators.  
-The builder executes built-in generators that generate files for other generators (or builders), or generates ready-to-use files, doing the chores for you.  
-The configurations for the built-in generators are described in the `build_it` format.  
+The `build_it` builder directly executes third-party (or your own) generators for you.  
+The builder executes thеse generators that generates ready-to-use files (or files for other builders or generators).  
+The configurations for generators are described in the `YAML` format.  
 Configurations are based on specifications.  
-That is, you describe the configuration in the `build_it` format according to the specification.
+That is, you describe the configuration in the `YAML` format according to the specification. Because the target generator will use this configuration for its work.
 
-## Specifications
+## How to implement your own `build_it` generator?
 
-A format specification is a collection of models.  
-An object is an instance of a model.  
-Each object describes a piece of configuration.  
-The root object describes the configuration.  
-By convention, one of the models is used as a description of the configuration.
+Notice:
+Please remember that your generator will be available to anyone who adds dependencies to your package.  
+The generator will be available with the name `your_package_name:generator_name`.  
+Or, if your generator has the same name as your package, then its alias (the short name) will be `your_package_name`.  
+Please don't forget this.  
+If necessary, you can hide it away in your package.  
+Eg. `src/foo/bar/baz_build_it.dart`
 
-For example, for generator `JsonSerializable`, the `JsonObjects` model is the root model that describes the configuration for that generator.
+Let's go.  
 
-## Generator `JsonSerializable`
-
-The header format for the `JsonSerializable` generator:
+First, add a dependency to the `pubspec.yaml` file:
 
 ```yaml
----
-format:
-  type: build_it
-  generator:
-    name: JsonSerializable
----
+dev_dependencies:
+  build: ^1.6.2
+  build_it: ^0.2.0
+  build_runner: ^1.11.5
 ```
 
-The format of the input configuration (used models) specified in the following file:
+Suppose you want to create a generator named `foo`. 
 
-[https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml](https://github.com/mezoni/build_it/blob/main/lib/src/specifications/json_serializable.yaml)  
+Create a file named `foo_build_it.dart` in the` lib` folder. 
 
-The `JsonObjects` model is used as the root model, which is used as the configuration.
+Add the following directive (for data exchange):
+
+```dart
+import 'package:build_it/build_it_models.dart';
+```
+
+Create a `main` method:
+
+```dart
+Future<void> main(List<String> args, [response]) async {
+  //
+}
+```
+
+And add some code to it.
+
+```dart
+import 'dart:convert';
+import 'dart:isolate';
+
+import 'package:build_it/build_it_models.dart';
+
+Future<void> main(List<String> args, [response]) async {
+  if (response is! SendPort) {
+    return;
+  }
+
+  if (args.length != 1) {
+    throw ArgumentError('Wrong number of arguments');
+  }
+
+  final arg = jsonDecode(args[0]) as Map;
+  final config = BuildConfig.fromJson(arg.cast());
+  final data = jsonDecode(config.data);
+  if (data == null) {
+    final result = BuildResult(code: '// There is no data\n');
+    response.send(jsonEncode(result.toJson()));
+    return;
+  }
+
+  if (data is! Map) {
+    throw StateError('Unexpected configuration data type: ${data.runtimeType}');
+  }
+
+  final name = data['name'] as String;
+  final code = <String>[];
+  final template = _template.replaceAll('{{NAME}}', name);
+  code.add(template);
+
+  final directives = <Directive>[];
+  directives.add(Directive(type: 'import', url: 'dart:io'));
+
+  final result = BuildResult(code: code.join('\n'), directives: directives);
+  response.send(jsonEncode(result.toJson()));
+}
+
+const _template = '''
+void main() {
+  stdout.writeln('Hello, {{NAME}}');
+}
+''';
+
+```
+
+Then create your config file:
+
+`foo_test.yaml`
 
 ```yaml
 ---
 format:
   name: build_it
-  generator:
-    name: JsonSerializable
+  language:
+    version: "2.10" # If you need it
+  generator:    
+    name: build_it_test:foo
 ---
 
-jsonObjects:
-- name: JsonObject
-  comments: "JsonObject is used to describe the JSON object"
-  properties:
-  - name: annotations
-    type: List<String>?
-    comments: "Metadata describing the JSON object"
-  - name: comments
-    type: String?
-    comments: "Documenting comments for JSON object"
-  - name: immutable
-    type: bool?
-    comments: "Indicates whether JSON object is immutable or not"
-  - name: name
-    type: String?
-    comments: "JSON object name"
-  - name: properties
-    type: List<Property>?
-    comments: "List of JSON object properties"
+name: "Jack"
+```
 
-- name: JsonObjects
-  comments: "JsonObjects is used to describe the collection of JSON objects"
-  properties:
-  - name: exports
-    type: List<String>?
-    comments: "List of used export directives"
-  - name: immutable
-    type: bool?
-    comments: "Indicates whether JSON objects is immutable or not"
-  - name: imports
-    type: List<String>?
-    comments: "List of used import directives"
-  - name: jsonObjects
-    type: List<JsonObject>?
-    comments: "List of JSON objects"
-  - name: parts
-    type: List<String>?
-    comments: "List of used part directives"
+We will assume that your package is named `build_it_test`.   
+Accordingly, the name of the generator is `build_it_test:foo`.  
 
-- name: Property
-  properties:
-  - name: annotations
-    type: List<String>?
-    comments: "Metadata describing the JSON object property"
-  - name: comments
-    type: String?
-    comments: "Documenting comments for JSON object property"
-  - name: name
-    type: String?
-    comments: "JSON object property name"
-  - name: type
-    type: String?
-    comments: "JSON object property type"
+Everything is ready, you can start the build process:
+
+`dart run build_runner build`
+
+Below is the build (and generation) result:
+
+`foo_test.g.dart`
+
+```dart
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+import 'dart:io';
+
+// **************************************************************************
+// build_it: build_it_test:foo
+// **************************************************************************
+
+void main() {
+  stdout.writeln('Hello, Jack');
+}
 
 ```
 
-An example of the input configuration:
+Yes, it’s not impressive, but we didn't put much effort into it.  
+A good generator should have a format specification and use JSON models to work with the configuration.
+
+## Built-in JSON generator
+
+For a generator to work well, a specification is required to describe the configuration and to work with the configuration.  
+JSON objects are very well suited for this purpose. They are convenient for modeling and data processing.  
+It is not very pleasant to write such objects by hand, it is a common routine work.  
+Using the `json` generator from the` build_it` package can make this work a little easier.  
+
+Example of configuration for this generator:
 
 `example_objects.yaml`
 
@@ -132,7 +193,7 @@ An example of the input configuration:
 format:
   name: build_it
   generator:
-    name: JsonSerializable
+    name: build_it:json
 ---
 
 jsonObjects:
@@ -148,7 +209,7 @@ jsonObjects:
   - { name: name, type: String }
 ```
 
-An example of the generated code:
+The result of work:
 
 `example_objects.g.dart`
 
@@ -199,48 +260,24 @@ class Product {
 
 ```
 
-Example of using generated code:
+This generator is an example of how and what kind of generator can be written and used with the `build_it` builder.  
+If you add the following dependencies to your project, then this generator will be available in your project as well.
 
-```dart
-import 'example_objects.g.dart';
-
-void main() {
-  final categories = _json.map((e) => Category.fromJson(e));
-  for (final category in categories) {
-    print('Category: ${category.name}');
-    for (final product in category.products) {
-      print('  Product: ${product.name}');
-    }
-  }
-}
-
-final _json = [
-  {
-    'id': 1,
-    'name': 'Intel CPU',
-    'products': [
-      {'id': 1, 'name': 'Celeron'},
-      {'id': 1, 'name': 'Pentium'},
-      {'id': 1, 'name': 'Core i3'},
-      {'id': 1, 'name': 'Core i5'},
-      {'id': 1, 'name': 'Core i7'},
-    ]
-  },
-  {
-    'id': 2,
-    'name': 'AMD CPU',
-    'products': [
-      {'id': 1, 'name': 'Sempron'},
-      {'id': 1, 'name': 'Athlon'},
-      {'id': 1, 'name': 'Phenom'},
-      {'id': 1, 'name': 'Opteron'},
-    ]
-  }
-];
-
+```yaml
+dependencies:
+  json_annotation: ^4.0.0
+dev_dependencies:
+  build: ^1.6.2
+  build_it: ^0.1.1
+  build_runner: ^1.11.5  
+  json_serializable: ^4.0.2
 ```
 
-## How to avoid bulld conflicts
+Now everyone who adds dependencies will have access to this generator.  
+This way everyone can easily create shared and useful generators for everyone.  
+This applies to all generators for `build_it`.
+
+## How to avoid bulld conflicts?
 
 The only way to avoid build conflicts is to not create a Dart file with the same name as the configuration file.  
 For example, if you are using a configuration file named `my_models.yaml`, then do not create a file called `my_models.dart`.  

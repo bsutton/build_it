@@ -2,8 +2,6 @@
 
 import 'package:build/build.dart';
 import 'package:build_it/build_it_generator.dart';
-import 'package:build_it/src/generators.dart';
-import 'package:dart_style/dart_style.dart';
 
 /// Build It factory
 Builder buildItBuilder(BuilderOptions options) => BuildItBuilder();
@@ -23,14 +21,11 @@ class BuildItBuilder implements Builder {
     final contents = await buildStep.readAsString(inputId);
     final generator = BuildItGenerator(
         input: inputId.path, output: outputId.path, source: contents);
-    final builder = StageBuilder();
-    var result = generator.generate(builder);
+    final result = await generator.generate();
     if (result == null) {
       return;
     }
 
-    final formatter = DartFormatter();
-    result = formatter.format(result);
     await buildStep.writeAsString(outputId, result);
   }
 }

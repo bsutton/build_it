@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Breaking changes and new features
+- Added the ability to run public third-party generators
+
 ## 0.1.1
 
 - Added `example.dart`

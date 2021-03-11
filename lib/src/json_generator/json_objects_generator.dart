@@ -1,30 +1,46 @@
 // @dart = 2.10
 
-part of '../json_serializable_generator.dart';
+part of '../json_generator.dart';
 
-class JsonObjectsGenerator extends Generator<void> with DirectivesGenerator {
-  final List<Spec> declarations;
+class JsonObjectsGenerator extends Generator<void> {
+  final List<Directive> directives;
 
   final JsonObjects jsonObjects;
 
+  final List<Spec> specs;
+
   JsonObjectsGenerator(
-      {@required this.declarations, @required this.jsonObjects});
+      {@required this.directives,
+      @required this.jsonObjects,
+      @required this.specs});
 
   @override
   void generate(StageBuilder builder) {
     builder.build('JSON objects', () => _build(builder));
   }
 
+  void _addDirectives(String type, List<String> urls) {
+    if (urls == null) {
+      return;
+    }
+
+    for (final url in urls) {
+      final directive = Directive(type: type, url: url);
+      directives.add(directive);
+    }
+  }
+
   void _addImportJsonAnnotation(StageBuilder b) {
     const url = 'package:json_annotation/json_annotation.dart';
-    declarations.add(Directive.import(url));
+    final directive = Directive(type: 'import', url: url);
+    directives.add(directive);
   }
 
   void _build(StageBuilder b) {
     _addImportJsonAnnotation(b);
-    addDirectives(declarations, DirectiveType.export, jsonObjects.exports);
-    addDirectives(declarations, DirectiveType.import, jsonObjects.imports);
-    addDirectives(declarations, DirectiveType.part, jsonObjects.parts);
+    _addDirectives('export', jsonObjects.exports);
+    _addDirectives('import', jsonObjects.imports);
+    _addDirectives('part', jsonObjects.parts);
     _generateJsonObjects(b);
   }
 
@@ -40,6 +56,6 @@ class JsonObjectsGenerator extends Generator<void> with DirectivesGenerator {
         input: jsonObjects.jsonObjects,
         build: (JsonObject jsonObject) =>
             _generateJsonObject(b, jsonObject)).generate(b);
-    declarations.addAll(result);
+    specs.addAll(result);
   }
 }

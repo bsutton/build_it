@@ -2,7 +2,7 @@
 format:
   name: build_it
   generator:
-    name: JsonSerializable
+    name: build_it:json
 ---
 
 jsonObjects:

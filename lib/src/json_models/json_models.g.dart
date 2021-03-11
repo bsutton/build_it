@@ -2,10 +2,10 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'json_serializable.g.g.dart';
+part 'json_models.g.g.dart';
 
 // **************************************************************************
-// build_it: JsonSerializable
+// build_it: build_it:json
 // **************************************************************************
 
 /// JsonObject is used to describe the JSON object

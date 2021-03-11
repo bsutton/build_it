@@ -1,7 +1,11 @@
+// @dart = 2.10
+
 import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:build_it/build_it_models.dart';
+import 'package:build_it/src/json_generator.dart';
+import 'package:build_it/src/json_models/json_models.g.dart';
 
 Future<void> main(List<String> args, [response]) async {
   if (response is! SendPort) {
@@ -16,7 +20,7 @@ Future<void> main(List<String> args, [response]) async {
   final config = BuildConfig.fromJson(arg.cast());
   final data = jsonDecode(config.data);
   if (data == null) {
-    final result = BuildResult(code: '// There is no data\n');
+    final result = BuildResult(code: '// There is no data\n', directives: []);
     response.send(jsonEncode(result.toJson()));
     return;
   }
@@ -25,15 +29,11 @@ Future<void> main(List<String> args, [response]) async {
     throw StateError('Unexpected configuration data type: ${data.runtimeType}');
   }
 
-  final name = data['name'];
-  final code = <String>[];
-  code.add('main() {');
-  code.add('stdout.writeln("Hello, $name!");');
-  code.add('}');
-
+  final jsonObjects = JsonObjects.fromJson((data as Map).cast());
   final directives = <Directive>[];
-  directives.add(Directive(type: 'import', url: 'dart:io'));
-
-  final result = BuildResult(code: code.join('\n'), directives: directives);
+  final generator = JsonGenerator(
+      directives: directives, output: config.output, jsonObjects: jsonObjects);
+  final code = generator.generate();
+  final result = BuildResult(code: code, directives: directives);
   response.send(jsonEncode(result.toJson()));
 }

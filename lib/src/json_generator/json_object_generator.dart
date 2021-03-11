@@ -1,6 +1,6 @@
 // @dart = 2.10
 
-part of '../json_serializable_generator.dart';
+part of '../json_generator.dart';
 
 class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
   final bool immutable;
