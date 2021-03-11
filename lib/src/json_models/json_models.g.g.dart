@@ -9,14 +9,16 @@ part of 'json_models.g.dart';
 JsonObject _$JsonObjectFromJson(Map<String, dynamic> json) {
   return JsonObject(
     annotations: (json['annotations'] as List<dynamic>?)
-        ?.map((e) => e as String)
-        .toList(),
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
     comments: json['comments'] as String?,
     immutable: json['immutable'] as bool?,
     name: json['name'] as String?,
     properties: (json['properties'] as List<dynamic>?)
-        ?.map((e) => Property.fromJson(e as Map<String, dynamic>))
-        .toList(),
+            ?.map((e) => Property.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
   );
 }
 
@@ -31,20 +33,27 @@ Map<String, dynamic> _$JsonObjectToJson(JsonObject instance) =>
 
 JsonObjects _$JsonObjectsFromJson(Map<String, dynamic> json) {
   return JsonObjects(
+    checkNullSafety: json['checkNullSafety'] as bool?,
     exports:
-        (json['exports'] as List<dynamic>?)?.map((e) => e as String).toList(),
+        (json['exports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
     immutable: json['immutable'] as bool?,
     imports:
-        (json['imports'] as List<dynamic>?)?.map((e) => e as String).toList(),
+        (json['imports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
     jsonObjects: (json['jsonObjects'] as List<dynamic>?)
-        ?.map((e) => JsonObject.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    parts: (json['parts'] as List<dynamic>?)?.map((e) => e as String).toList(),
+            ?.map((e) => JsonObject.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    parts:
+        (json['parts'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
   );
 }
 
 Map<String, dynamic> _$JsonObjectsToJson(JsonObjects instance) =>
     <String, dynamic>{
+      'checkNullSafety': instance.checkNullSafety,
       'exports': instance.exports,
       'immutable': instance.immutable,
       'imports': instance.imports,
@@ -55,9 +64,12 @@ Map<String, dynamic> _$JsonObjectsToJson(JsonObjects instance) =>
 Property _$PropertyFromJson(Map<String, dynamic> json) {
   return Property(
     annotations: (json['annotations'] as List<dynamic>?)
-        ?.map((e) => e as String)
-        .toList(),
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
     comments: json['comments'] as String?,
+    defaultValue: json['defaultValue'],
+    key: json['key'] as String?,
     name: json['name'] as String?,
     type: json['type'] as String?,
   );
@@ -66,6 +78,8 @@ Property _$PropertyFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PropertyToJson(Property instance) => <String, dynamic>{
       'annotations': instance.annotations,
       'comments': instance.comments,
+      'defaultValue': instance.defaultValue,
+      'key': instance.key,
       'name': instance.name,
       'type': instance.type,
     };

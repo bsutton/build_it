@@ -15,8 +15,12 @@ class JsonObjectsGenerator extends Generator<void> {
       @required this.specs});
 
   @override
-  void generate(StageBuilder builder) {
-    builder.build('JSON objects', () => _build(builder));
+  void generate() {
+    _addImportJsonAnnotation();
+    _addDirectives('export', jsonObjects.exports);
+    _addDirectives('import', jsonObjects.imports);
+    _addDirectives('part', jsonObjects.parts);
+    _generateJsonObjects();
   }
 
   void _addDirectives(String type, List<String> urls) {
@@ -30,32 +34,24 @@ class JsonObjectsGenerator extends Generator<void> {
     }
   }
 
-  void _addImportJsonAnnotation(StageBuilder b) {
+  void _addImportJsonAnnotation() {
     const url = 'package:json_annotation/json_annotation.dart';
     final directive = Directive(type: 'import', url: url);
     directives.add(directive);
   }
 
-  void _build(StageBuilder b) {
-    _addImportJsonAnnotation(b);
-    _addDirectives('export', jsonObjects.exports);
-    _addDirectives('import', jsonObjects.imports);
-    _addDirectives('part', jsonObjects.parts);
-    _generateJsonObjects(b);
-  }
+  void _generateJsonObjects() {
+    final list = jsonObjects.jsonObjects;
+    for (var i = 0; i < list.length; i++) {
+      final element = list[i];
+      final g = JsonObjectGenerator(
+          jsonObject: element,
+          immutable: jsonObjects.immutable,
+          index: i,
+          checkNullSafety: jsonObjects.checkNullSafety);
 
-  Class _generateJsonObject(StageBuilder b, JsonObject jsonObject) {
-    final generator = JsonObjectGenerator(
-        jsonObject: jsonObject, immutable: jsonObjects.immutable);
-    return generator.generate(b);
-  }
-
-  void _generateJsonObjects(StageBuilder b) {
-    final result = ItemsGenerator(
-        stage: 'JSON object',
-        input: jsonObjects.jsonObjects,
-        build: (JsonObject jsonObject) =>
-            _generateJsonObject(b, jsonObject)).generate(b);
-    specs.addAll(result);
+      final result = g.generate();
+      specs.add(result);
+    }
   }
 }

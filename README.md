@@ -5,16 +5,23 @@ The `build_it`is a builder that makes publicly available third-party source code
 Version 0.2.2 (BETA)
 
 TODO:
-- Improvement of the built-in JSON generator for safe use generated JSON objects with non-nullable runtime environment
-- Improving the built-in JSON generator by adding unimplemented functionality
+- Improvements to the `build_it` generator error reporting system
+- Improvements to the built-in JSON generator by adding unimplemented `json_serializable` functionality
 
-## What are the principles of work?
+## What are the benefits of using?
 
-The `build_it` builder simplifies several development steps at once:
-
+The `build_it` builder simplifies several development steps at once:  
 - Allows you to easily use your own generator without delving too much into the principles of the build process (generate whatever you want)  
 - You can use your own data description format to configure your generator in YAML format (it is recommended to use JSON models for this purpose)  
 - You can use third-party source code generators for rapid development, you just need to know the configuration description format (and what they end up creating)  
+- A built-in JSON generator is provided to simplify the creation of generators specification models, or it can be used to generate code for JSON objects that are commonly used  
+
+## What are the principles of work?
+
+The `build_it` builder is a common builder for the Dart build system. It is intended for building Dart projects.  
+It is configured and for those who use it there is no need to worry about how it works.  
+On the other hand, it allows you to use third-party (or your own) code generators quite simply without the need to know how it all works.  
+If you need to generate code based on some configuration, then you simply create a configuration file for a specific generator and `build_it` builder does all the work for you (runs the corresponding generator).
 
 ## How do generators become publicly available?
 

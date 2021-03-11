@@ -12,18 +12,19 @@ part 'json_models.g.g.dart';
 @JsonSerializable()
 class JsonObject {
   JsonObject(
-      {this.annotations,
+      {required this.annotations,
       this.comments,
       this.immutable,
       this.name,
-      this.properties});
+      required this.properties});
 
   /// Creates an object from a JSON representation
   factory JsonObject.fromJson(Map<String, dynamic> json) =>
       _$JsonObjectFromJson(json);
 
   /// Metadata describing the JSON object
-  List<String>? annotations;
+  @JsonKey(defaultValue: [])
+  List<String> annotations;
 
   /// Documenting comments for JSON object
   String? comments;
@@ -35,7 +36,8 @@ class JsonObject {
   String? name;
 
   /// List of JSON object properties
-  List<Property>? properties;
+  @JsonKey(defaultValue: [])
+  List<Property> properties;
 
   /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$JsonObjectToJson(this);
@@ -45,30 +47,38 @@ class JsonObject {
 @JsonSerializable()
 class JsonObjects {
   JsonObjects(
-      {this.exports,
+      {this.checkNullSafety,
+      required this.exports,
       this.immutable,
-      this.imports,
-      this.jsonObjects,
-      this.parts});
+      required this.imports,
+      required this.jsonObjects,
+      required this.parts});
 
   /// Creates an object from a JSON representation
   factory JsonObjects.fromJson(Map<String, dynamic> json) =>
       _$JsonObjectsFromJson(json);
 
+  /// Indicates the need for a null safety check during code generation
+  bool? checkNullSafety;
+
   /// List of used export directives
-  List<String>? exports;
+  @JsonKey(defaultValue: [])
+  List<String> exports;
 
   /// Indicates whether JSON objects is immutable or not
   bool? immutable;
 
   /// List of used import directives
-  List<String>? imports;
+  @JsonKey(defaultValue: [])
+  List<String> imports;
 
   /// List of JSON objects
-  List<JsonObject>? jsonObjects;
+  @JsonKey(defaultValue: [])
+  List<JsonObject> jsonObjects;
 
   /// List of used part directives
-  List<String>? parts;
+  @JsonKey(defaultValue: [])
+  List<String> parts;
 
   /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$JsonObjectsToJson(this);
@@ -76,17 +86,30 @@ class JsonObjects {
 
 @JsonSerializable()
 class Property {
-  Property({this.annotations, this.comments, this.name, this.type});
+  Property(
+      {required this.annotations,
+      this.comments,
+      this.defaultValue,
+      this.key,
+      this.name,
+      this.type});
 
   /// Creates an object from a JSON representation
   factory Property.fromJson(Map<String, dynamic> json) =>
       _$PropertyFromJson(json);
 
   /// Metadata describing the JSON object property
-  List<String>? annotations;
+  @JsonKey(defaultValue: [])
+  List<String> annotations;
 
   /// Documenting comments for JSON object property
   String? comments;
+
+  /// Documenting comments for JSON object property
+  Object? defaultValue;
+
+  /// The key in a JSON map
+  String? key;
 
   /// JSON object property name
   String? name;

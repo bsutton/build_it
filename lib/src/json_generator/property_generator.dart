@@ -3,15 +3,33 @@
 part of '../json_generator.dart';
 
 class PropertyGenerator extends Generator<Field> with CommentsGenerator {
+  final bool checkNullSafety;
+
+  final int index;
+
   final bool immutable;
+
+  final String objectName;
 
   final Property property;
 
-  PropertyGenerator({@required this.immutable, @required this.property});
+  PropertyGenerator(
+      {@required this.checkNullSafety,
+      @required this.immutable,
+      @required this.index,
+      @required this.objectName,
+      @required this.property});
 
   @override
-  Field generate(StageBuilder builder) {
-    return builder.build('Property \'${property.name}\'', _build);
+  Field generate() {
+    return Field((b) {
+      _addComments(b);
+      _addAnnotations(b);
+      _setName(b);
+      _setType(b);
+      _setMutability(b);
+      _addJsonKeyAnnotation(b);
+    });
   }
 
   void _addAnnotation(FieldBuilder b, Expression annotation) {
@@ -19,7 +37,7 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
   }
 
   void _addAnnotations(FieldBuilder b) {
-    for (final annotation in _getAnnotations()) {
+    for (final annotation in property.annotations) {
       _addAnnotation(b, refer(annotation));
     }
   }
@@ -30,18 +48,73 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
     }
   }
 
-  Field _build() {
-    return Field((b) {
-      _addComments(b);
-      _addAnnotations(b);
-      _setName(b);
-      _setType(b);
-      _setMutability(b);
-    });
+  void _addJsonKeyAnnotation(FieldBuilder b) {
+    final namedArguments = <String, Expression>{};
+    if (property.key != null) {
+      namedArguments['name'] = literalString(property.key);
+    }
+
+    final defaultValue = _getDefaultValue();
+    if (defaultValue != null) {
+      namedArguments['defaultValue'] = defaultValue;
+    } else {
+      final type = property.type.trim();
+      final isNullable = type.endsWith('?');
+      if (!isNullable && _needCheckNullSafety()) {
+        final name = property.name;
+        throw StateError(
+            'No default value specified for property \'$name\' with non-nullable type \'$type\'');
+      }
+    }
+
+    if (namedArguments.isNotEmpty) {
+      final annotation = refer('JsonKey').call([], namedArguments);
+      _addAnnotation(b, annotation);
+    }
   }
 
-  List<String> _getAnnotations() {
-    return property.annotations ?? [];
+  Expression _getDefaultValue() {
+    final defaultValue = property.defaultValue;
+    if (defaultValue == null) {
+      return null;
+    }
+
+    if (property.defaultValue != null) {
+      if (defaultValue is bool) {
+        return literalBool(defaultValue);
+      }
+
+      if (defaultValue is double) {
+        return literal(defaultValue);
+      }
+
+      if (defaultValue is int) {
+        return literal(defaultValue);
+      }
+
+      if (defaultValue is List) {
+        return literalList(defaultValue);
+      }
+
+      if (defaultValue is Map) {
+        return literalMap(defaultValue);
+      }
+
+      if (defaultValue is String) {
+        final type = property.type.trim().replaceAll(' ', '');
+        if (type == 'String' || type == 'String?') {
+          return literalString(defaultValue);
+        }
+
+        return CodeExpression(Code(defaultValue));
+      }
+    }
+
+    return null;
+  }
+
+  bool _needCheckNullSafety() {
+    return checkNullSafety == true;
   }
 
   void _setMutability(FieldBuilder b) {
@@ -51,12 +124,14 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
   }
 
   void _setName(FieldBuilder b) {
-    final name = getField(property.name, 'name');
+    final name = getField(property.name,
+        'The name of the property with index $index of JSON object \'$objectName\' is not specified');
     b.name = name;
   }
 
   void _setType(FieldBuilder b) {
-    final type = getField(property.type, 'type');
+    final type = getField(property.type,
+        'The type of property \'${property.name}\' of JSON object \'$objectName\' is not specified.');
     b.type = refer(type);
   }
 }

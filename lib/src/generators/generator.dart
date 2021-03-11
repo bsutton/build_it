@@ -3,14 +3,14 @@
 part of '../generators.dart';
 
 abstract class Generator<E> {
-  E generate(StageBuilder builder);
+  E generate();
 
-  T getField<T>(T value, String name) {
+  T getField<T>(T value, String message) {
     if (value is T) {
       return value;
     }
 
-    throw StateError('Field \'$name\' must not be null');
+    throw StateError(message);
   }
 
   bool hasAnnotation(List<String> annotations, String annotation) {

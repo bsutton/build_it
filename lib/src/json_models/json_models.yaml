@@ -5,13 +5,16 @@ format:
     name: build_it:json
 ---
 
+checkNullSafety: true
+
 jsonObjects:
 - name: JsonObject
   comments: "JsonObject is used to describe the JSON object"
   properties:
   - name: annotations
-    type: List<String>?
+    type: List<String>
     comments: "Metadata describing the JSON object"
+    defaultValue: []
   - name: comments
     type: String?
     comments: "Documenting comments for JSON object"
@@ -22,36 +25,51 @@ jsonObjects:
     type: String?
     comments: "JSON object name"
   - name: properties
-    type: List<Property>?
+    type: List<Property>
     comments: "List of JSON object properties"
+    defaultValue: []
 
 - name: JsonObjects
   comments: "JsonObjects is used to describe the collection of JSON objects"
   properties:
+  - name: checkNullSafety
+    type: bool?
+    comments: "Indicates the need for a null safety check during code generation"
   - name: exports
-    type: List<String>?
+    type: List<String>
     comments: "List of used export directives"
+    defaultValue: []
   - name: immutable
     type: bool?
     comments: "Indicates whether JSON objects is immutable or not"
   - name: imports
-    type: List<String>?
+    type: List<String>
+    defaultValue: []
     comments: "List of used import directives"
   - name: jsonObjects
-    type: List<JsonObject>?
+    type: List<JsonObject>
     comments: "List of JSON objects"
+    defaultValue: []
   - name: parts
-    type: List<String>?
-    comments: "List of used part directives"
+    type: List<String>
+    comments: "List of used part directives"  
+    defaultValue: []
 
 - name: Property
   properties:
   - name: annotations
-    type: List<String>?
+    type: List<String>
     comments: "Metadata describing the JSON object property"
+    defaultValue: []
   - name: comments
     type: String?
     comments: "Documenting comments for JSON object property"
+  - name: defaultValue
+    type: Object?
+    comments: "Documenting comments for JSON object property"  
+  - name: key
+    type: String?
+    comments: "The key in a JSON map"
   - name: name
     type: String?
     comments: "JSON object property name"

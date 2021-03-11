@@ -145,12 +145,13 @@ class BuildItGenerator {
       }
     }
 
-    final prologue = ['// GENERATED CODE - DO NOT MODIFY BY HAND\n\n'];
+    final prologue = ['// GENERATED CODE - DO NOT MODIFY BY HAND\n'];
 
     if (dartVersion != null) {
-      prologue.add('// @dart = $dartVersion\n\n');
+      prologue.add('// @dart = $dartVersion\n');
     }
-
+    
+    prologue.add('\n');
     _addDirectives(prologue, directives, 'import');
     _addDirectives(prologue, directives, 'export');
     _addDirectives(prologue, directives, 'part');

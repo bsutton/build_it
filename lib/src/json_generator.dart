@@ -2,7 +2,7 @@
 
 import 'package:build_it/build_it_models.dart';
 import 'package:code_builder/code_builder.dart' hide Directive;
-import 'package:meta/meta.dart';
+import 'package:meta/meta.dart' hide literal;
 import 'package:path/path.dart' as _path;
 
 import 'generators.dart';
@@ -25,31 +25,27 @@ class JsonGenerator {
       @required this.output});
 
   String generate() {
-    final builder = StageBuilder();
-    return builder.build('Json', () {
-      final specs = <Spec>[];
-      final generator = JsonObjectsGenerator(
-          directives: directives, jsonObjects: jsonObjects, specs: specs);
-      generator.generate(builder);
-      final fullPath = false;
-      final basename = _path.basenameWithoutExtension(output);
-      final segments = _path.split(output);
-      var path = basename + '.g' + _path.extension(output);
-      if (fullPath) {
-        segments[segments.length - 1] =
-            basename + '.g' + _path.extension(output);
-        path = _path.joinAll(segments);
-      }
+    final specs = <Spec>[];
+    final g = JsonObjectsGenerator(
+        directives: directives, jsonObjects: jsonObjects, specs: specs);
+    g.generate();
+    final fullPath = false;
+    final basename = _path.basenameWithoutExtension(output);
+    final segments = _path.split(output);
+    var path = basename + '.g' + _path.extension(output);
+    if (fullPath) {
+      segments[segments.length - 1] = basename + '.g' + _path.extension(output);
+      path = _path.joinAll(segments);
+    }
 
-      directives.add(Directive(type: 'part', url: path));
+    directives.add(Directive(type: 'part', url: path));
 
-      final library = Library((b) {
-        b.body.addAll(specs);
-      });
-
-      final emitter = DartEmitter(Allocator.simplePrefixing());
-      final result = '${library.accept(emitter)}';
-      return result;
+    final library = Library((b) {
+      b.body.addAll(specs);
     });
+
+    final emitter = DartEmitter(Allocator.simplePrefixing());
+    final result = '${library.accept(emitter)}';
+    return result;
   }
 }
