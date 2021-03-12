@@ -70,7 +70,8 @@ First, add a dependency to the `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:  
-  build_it: ^0.2.3  
+  build_it: ^0.2.3
+  json_serializable: ^4.0.2 
 ```
 
 Suppose you want to create a generator named `foo`. 
@@ -285,7 +286,8 @@ If you add the following dependencies to your project, then this generator will 
 dependencies:
   json_annotation: ^4.0.0
 dev_dependencies:  
-  build_it: ^0.2.3  
+  build_it: ^0.2.3
+  json_serializable: ^4.0.2 
 ```
 
 Now everyone who adds dependencies will have access to this generator.  
