@@ -49,6 +49,7 @@ class JsonObjects {
   JsonObjects(
       {this.checkNullSafety,
       required this.exports,
+      this.filename,
       this.immutable,
       required this.imports,
       required this.jsonObjects,
@@ -64,6 +65,9 @@ class JsonObjects {
   /// List of used export directives
   @JsonKey(defaultValue: [])
   List<String> exports;
+
+  /// If a filename is specified, the result will be written to the file rather than to the build output
+  String? filename;
 
   /// Indicates whether JSON objects is immutable or not
   bool? immutable;

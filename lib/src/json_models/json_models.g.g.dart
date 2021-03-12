@@ -37,6 +37,7 @@ JsonObjects _$JsonObjectsFromJson(Map<String, dynamic> json) {
     exports:
         (json['exports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
             [],
+    filename: json['filename'] as String?,
     immutable: json['immutable'] as bool?,
     imports:
         (json['imports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
@@ -55,6 +56,7 @@ Map<String, dynamic> _$JsonObjectsToJson(JsonObjects instance) =>
     <String, dynamic>{
       'checkNullSafety': instance.checkNullSafety,
       'exports': instance.exports,
+      'filename': instance.filename,
       'immutable': instance.immutable,
       'imports': instance.imports,
       'jsonObjects': instance.jsonObjects,
