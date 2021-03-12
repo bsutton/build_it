@@ -284,11 +284,8 @@ If you add the following dependencies to your project, then this generator will 
 ```yaml
 dependencies:
   json_annotation: ^4.0.0
-dev_dependencies:
-  build: ^1.6.2
-  build_it: ^0.1.1
-  build_runner: ^1.11.5  
-  json_serializable: ^4.0.2
+dev_dependencies:  
+  build_it: ^0.2.3  
 ```
 
 Now everyone who adds dependencies will have access to this generator.  
