@@ -2,10 +2,9 @@
 
 The `build_it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
-Version 0.2.3 (BETA)
+Version 0.2.4 (BETA)
 
 TODO:
-- Improvements to the `build_it` generator error reporting system
 - Improvements to the built-in JSON generator by adding unimplemented `json_serializable` functionality
 
 ## What are the benefits of using?
@@ -70,12 +69,8 @@ That is, you describe the configuration in the `YAML` format according to the sp
 First, add a dependency to the `pubspec.yaml` file:
 
 ```yaml
-dependencies:
-  # Don't forget about other runtime dependencies, eg. `json_annotation`
-dev_dependencies:
-  build: ^1.6.2
-  build_it: ^0.2.0
-  build_runner: ^1.11.5
+dev_dependencies:  
+  build_it: ^0.2.3  
 ```
 
 Suppose you want to create a generator named `foo`. 
