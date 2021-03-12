@@ -6,6 +6,7 @@ Version 0.2.4 (BETA)
 
 TODO:
 - Improvements to the built-in JSON generator by adding unimplemented `json_serializable` functionality
+- Add to the `JSON` generator the ability (through some variable in the configuration) to generate JSON files with the `.dart` extension instead of `.g.dart` (by sending an empty result to build output and write them directly to the filesystem) to be able to use the `JSON` generator to generate models for other `build_it` generators (because files with the extension `.g.dart` are generated files and always are removed (cleaned) before the build starts, making them unavailable for internal use by these generators).
 
 ## What are the benefits of using?
 
