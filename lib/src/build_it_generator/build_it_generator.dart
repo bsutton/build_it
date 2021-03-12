@@ -1,6 +1,6 @@
 // @dart = 2.10
 
-part of '../../build_it_generator.dart';
+part of '../build_it_generator.dart';
 
 class BuildItGenerator {
   final String input;
@@ -104,13 +104,20 @@ class BuildItGenerator {
           metadata: jsonEncode(metadata),
           output: output);
       final args = [jsonEncode(config.toJson())];
+      final errors = <String>[];
       BuildResult result;
-      final response = await _spawn(Uri.parse(packageUrl), args, context);
+      final response = await _spawn(Uri.parse(packageUrl), args, errors);
       if (response is String) {
         final json = jsonDecode(response);
         if (json is Map) {
           result = BuildResult.fromJson(json.cast());
         }
+      }
+
+      if (errors.isNotEmpty) {
+        final message = errors.first;
+        errors.clear();
+        _error(message, context);
       }
 
       if (result == null) {
@@ -185,13 +192,13 @@ class BuildItGenerator {
 
   @alwaysThrows
   void _error(String message, _Context context) {
-    message = _getErrorMessage(message, context);
-    throw StateError(message);
+    var exception = 'The \'build_it\' processing error\n';
+    exception += _getErrorMessage(message, context);
+    throw exception;
   }
 
   String _getErrorMessage(String message, context) {
     final sb = StringBuffer();
-    sb.writeln('The \'build_it\' processing error');
     sb.writeln(message);
     if (context.generatorName != null) {
       sb.write('Generator: ');
@@ -281,7 +288,7 @@ class BuildItGenerator {
     return null;
   }
 
-  Future _spawn(Uri url, List<String> args, _Context context) async {
+  Future _spawn(Uri url, List<String> args, List<String> errors) async {
     final exitPort = ReceivePort();
     final errorPort = ReceivePort();
     final responsePort = ReceivePort();
@@ -300,17 +307,13 @@ class BuildItGenerator {
       cloaseAllPorts();
       if (!hasError) {
         if (resultCount == 0) {
-          final message = _getErrorMessage(
-              'The generator did not return a result.', context);
-          stderr.writeln(message);
+          errors.add('The generator did not return a result');
           completer.complete();
         } else if (resultCount == 1) {
           completer.complete(result);
         } else {
-          final message = _getErrorMessage(
-              'The generator returned the result $resultCount times, the results were rejected',
-              context);
-          stderr.writeln(message);
+          errors.add(
+              'The generator returned the result $resultCount times, the results were rejected');
           completer.complete();
         }
       } else {
@@ -319,17 +322,14 @@ class BuildItGenerator {
     });
 
     errorPort.listen((messages) {
-      final message = _getErrorMessage(
-          'An exception was thrown during generator execution', context);
-      stderr.writeln(message);
+      var message = 'An exception was thrown during generator execution\n';
       if (messages is List) {
-        for (final message in messages) {
-          stderr.writeln(message);
-        }
+        message += messages.join();
       } else {
-        stderr.writeln(messages);
+        message += '$messages';
       }
 
+      errors.add(message);
       hasError = true;
     });
 
@@ -345,9 +345,7 @@ class BuildItGenerator {
     } catch (e) {
       cloaseAllPorts();
       completer.complete();
-      final message =
-          _getErrorMessage('Isolate spawning exception occurred', context);
-      stderr.writeln(message);
+      errors.add('Isolate spawning exception occurred');
       rethrow;
     }
 

@@ -1,6 +1,6 @@
 // @dart = 2.10
 
-part of '../../build_it_generator.dart';
+part of '../build_it_generator.dart';
 
 extension _SetExt<E> on Set<E> {
   bool equalsTo(Set<E> other) {

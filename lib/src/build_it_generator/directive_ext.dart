@@ -1,6 +1,6 @@
 // @dart = 2.10
 
-part of '../../build_it_generator.dart';
+part of '../build_it_generator.dart';
 
 extension _DirectiveExt on Directive {
   bool equalsTo(Directive other) {

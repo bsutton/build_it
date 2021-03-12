@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Slightly improved the `build_it` generators error reporting system
+
 ## 0.2.2
 
 - Reduced and improved the source code of the JSON generator

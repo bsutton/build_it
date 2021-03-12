@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as _path;
 import 'package:yaml/yaml.dart' as _yaml;
 
-part 'src/build_it_generator/build_it_generator.dart';
-part 'src/build_it_generator/directive_ext.dart';
-part 'src/build_it_generator/list_extension.dart';
-part 'src/build_it_generator/set_extension.dart';
+part 'build_it_generator/build_it_generator.dart';
+part 'build_it_generator/directive_ext.dart';
+part 'build_it_generator/list_extension.dart';
+part 'build_it_generator/set_extension.dart';

@@ -1,7 +1,7 @@
 // @dart=2.10
 
 import 'package:build/build.dart';
-import 'package:build_it/build_it_generator.dart';
+import 'package:build_it/src/build_it_generator.dart';
 
 /// Build It factory
 Builder buildItBuilder(BuilderOptions options) => BuildItBuilder();
