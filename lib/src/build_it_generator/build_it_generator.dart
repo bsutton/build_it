@@ -150,7 +150,7 @@ class BuildItGenerator {
     if (dartVersion != null) {
       prologue.add('// @dart = $dartVersion\n');
     }
-    
+
     prologue.add('\n');
     _addDirectives(prologue, directives, 'import');
     _addDirectives(prologue, directives, 'export');

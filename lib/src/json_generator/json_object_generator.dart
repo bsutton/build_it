@@ -133,7 +133,8 @@ class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
   }
 
   void _setName(ClassBuilder b) {
-    final name = getField(jsonObject.name, 'The name of JSON object with index $index is not specified');
+    final name = getField(jsonObject.name,
+        'The name of JSON object with index $index is not specified');
     b.name = name;
   }
 }

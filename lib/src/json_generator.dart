@@ -26,6 +26,7 @@ class JsonGenerator {
 
   String generate() {
     final specs = <Spec>[];
+
     final g = JsonObjectsGenerator(
         directives: directives, jsonObjects: jsonObjects, specs: specs);
     g.generate();
