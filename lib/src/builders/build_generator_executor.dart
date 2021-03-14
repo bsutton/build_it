@@ -105,10 +105,6 @@ class _BuildGeneratorExecutor extends _GeneratorExecutor {
       code.add(
           '// **************************************************************************\n\n');
 
-      if (true) {
-        code.add('// @build_it : combine_into_single_file\n');
-      }
-
       if (result.code != null) {
         code.add(result.code);
       }

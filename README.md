@@ -2,7 +2,7 @@
 
 The `build_it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 
-Version 0.2.4 (BETA)
+Version 0.2.5 (BETA)
 
 TODO:
 - Improvements to the built-in JSON generator by adding unimplemented `json_serializable` functionality.  
