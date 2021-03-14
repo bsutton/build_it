@@ -8,7 +8,8 @@ part of 'models.g.dart';
 
 BuildConfig _$BuildConfigFromJson(Map<String, dynamic> json) {
   return BuildConfig(
-    data: json['contents'] as String,
+    combineParts: json['combineParts'] as bool?,
+    data: json['data'] as String,
     index: json['index'] as int,
     input: json['input'] as String,
     metadata: json['metadata'] as String,
@@ -18,7 +19,8 @@ BuildConfig _$BuildConfigFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$BuildConfigToJson(BuildConfig instance) =>
     <String, dynamic>{
-      'contents': instance.data,
+      'combineParts': instance.combineParts,
+      'data': instance.data,
       'index': instance.index,
       'input': instance.input,
       'metadata': instance.metadata,
@@ -52,6 +54,7 @@ BuildResult _$BuildResultFromJson(Map<String, dynamic> json) {
         ?.map((e) => Directive.fromJson(e as Map<String, dynamic>))
         .toList(),
     error: json['error'] as String?,
+    postBuildData: json['postBuildData'] as String?,
   );
 }
 
@@ -60,4 +63,18 @@ Map<String, dynamic> _$BuildResultToJson(BuildResult instance) =>
       'code': instance.code,
       'directives': instance.directives,
       'error': instance.error,
+      'postBuildData': instance.postBuildData,
+    };
+
+PostBuildConfig _$PostBuildConfigFromJson(Map<String, dynamic> json) {
+  return PostBuildConfig(
+    data: json['data'] as String?,
+    input: json['input'] as String,
+  );
+}
+
+Map<String, dynamic> _$PostBuildConfigToJson(PostBuildConfig instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'input': instance.input,
     };

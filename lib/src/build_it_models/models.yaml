@@ -6,10 +6,14 @@ format:
 ---
 
 immutable: true
+
 jsonObjects:
 - name: BuildConfig
   comments: "Configuration passed to generators"
   properties:
+  - name: combineParts
+    type: bool?
+    comments: "If true, one file without parts will also be built"
   - name: data
     type: String
     comments: "Contents of YAML document in JSON format"
@@ -58,3 +62,16 @@ jsonObjects:
   - name: error
     comments: "A message indicating that an error has occurred"
     type: String?
+  - name: postBuildData
+    comments: "If specified, a post build step with the specified value will be called"
+    type: String?
+
+- name: PostBuildConfig
+  comments: "Post-build configuration that will be passed to the handler method"
+  properties:  
+  - name: data
+    comments: "Input user to be processed by the handler"
+    type: String?
+  - name: input
+    comments: "The parameter received by the post-builder"
+    type: String

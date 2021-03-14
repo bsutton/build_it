@@ -1,31 +1,20 @@
-import 'dart:convert';
-import 'dart:isolate';
+import 'package:build_it/build_it_helper.dart';
+import 'package:build_it/json_helper.dart';
 
-import 'package:build_it/build_it_models.dart';
+Future<void> main(List<String> args, [message]) async {
+  return await buildIt(args, message, _build);
+}
 
-Future<void> main(List<String> args, [response]) async {
-  if (response is! SendPort) {
-    return;
-  }
+Future<BuildResult> _build(BuildConfig config) async {
+  const _template = '''
+void main() {
+  stdout.writeln('Hello, {{NAME}}');
+}
+''';
 
-  if (args.length != 1) {
-    throw ArgumentError('Wrong number of arguments');
-  }
+  final data = config.data.decodeJson((e) => Data.fromMap(e));
+  final name = data.name;
 
-  final arg = jsonDecode(args[0]) as Map;
-  final config = BuildConfig.fromJson(arg.cast());
-  final data = jsonDecode(config.data);
-  if (data == null) {
-    final result = BuildResult(code: '// There is no data\n');
-    response.send(jsonEncode(result.toJson()));
-    return;
-  }
-
-  if (data is! Map) {
-    throw StateError('Unexpected configuration data type: ${data.runtimeType}');
-  }
-
-  final name = data['name'] as String;
   final code = <String>[];
   final template = _template.replaceAll('{{NAME}}', name);
   code.add(template);
@@ -33,12 +22,15 @@ Future<void> main(List<String> args, [response]) async {
   final directives = <Directive>[];
   directives.add(Directive(type: 'import', url: 'dart:io'));
 
-  final result = BuildResult(code: code.join('\n'), directives: directives);
-  response.send(jsonEncode(result.toJson()));
+  return BuildResult(code: code.join('\n'), directives: directives);
 }
 
-const _template = '''
-void main() {
-  stdout.writeln('Hello, {{NAME}}');
+class Data {
+  final String name;
+
+  Data({required this.name});
+
+  factory Data.fromMap(Map<String, dynamic> json) {
+    return Data(name: (json['name'] as String?) ?? '');
+  }
 }
-''';

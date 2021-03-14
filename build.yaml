@@ -7,9 +7,19 @@ targets:
 builders:
   build_it:
     target: ":build_it"
-    import: "package:build_it/build_it_builder.dart"
-    builder_factories: ["buildItBuilder"]
+    import: "package:build_it/builders.dart"
+    builder_factories: ["builder"]
     build_extensions: {".yaml": [".g.dart"]}
     auto_apply: dependents
     #build_to: cache
     build_to: source
+    applies_builders: ["|post_build_it"]
+post_process_builders:
+  post_build_it:
+    import: "package:build_it/builders.dart"
+    builder_factory: postBuilder 
+    defaults:
+      release_options:
+        enabled: true
+      dev_options:
+        enabled: true

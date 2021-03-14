@@ -39,9 +39,6 @@ jsonObjects:
     type: List<String>
     comments: "List of used export directives"
     defaultValue: []
-  - name: filename
-    type: String?
-    comments: "If a filename is specified, the result will be written to the file rather than to the build output"    
   - name: immutable
     type: bool?
     comments: "Indicates whether JSON objects is immutable or not"

@@ -15,18 +15,20 @@ part 'json_generator/property_generator.dart';
 class JsonGenerator {
   final List<Directive> directives;
 
+  final String input;
+
   final JsonObjects jsonObjects;
 
   final String output;
 
   JsonGenerator(
       {@required this.directives,
+      @required this.input,
       @required this.jsonObjects,
       @required this.output});
 
   String generate() {
     final specs = <Spec>[];
-
     final g = JsonObjectsGenerator(
         directives: directives, jsonObjects: jsonObjects, specs: specs);
     g.generate();
@@ -39,8 +41,8 @@ class JsonGenerator {
       path = _path.joinAll(segments);
     }
 
-    directives.add(Directive(type: 'part', url: path));
-
+    final partDirective = Directive(type: 'part', url: path);
+    directives.add(partDirective);
     final library = Library((b) {
       b.body.addAll(specs);
     });

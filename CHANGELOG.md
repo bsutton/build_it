@@ -1,3 +1,9 @@
+## 0.2.4
+
+- Added (new feature) `post process` build support (not very well tested yet)
+- Breaking change to support the `post process` build, the parameters of the `main` function of the generators have been changed
+- Added the ability to simplify the process of handling the build steps from the `main` function of generators using `build_it_helper.dart`
+
 ## 0.2.3
 
 - Slightly improved the `build_it` generators error reporting system
