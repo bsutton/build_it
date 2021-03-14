@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:build_it/build_it_models.dart';
-import 'package:build_it/json_helper.dart';
+import 'package:json_helpers/json_helpers.dart';
 
 export 'build_it_models.dart';
 
@@ -23,7 +23,7 @@ Future<void> buildIt(
 
   T decodeConfig<T>(arg, T Function(Map<String, dynamic>) fromJson) {
     if (arg is String) {
-      return arg.decodeJson(fromJson);
+      return arg.json(fromJson);
     } else {
       _errorInvalidArgument();
     }

@@ -61,9 +61,9 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
       final type = property.type.trim();
       final isNullable = type.endsWith('?');
       if (!isNullable && _needCheckNullSafety()) {
-        final name = property.name;
+        final name = _getFullName(true);
         throw StateError(
-            'No default value specified for property \'$name\' with non-nullable type \'$type\'');
+            'No default value specified for non-nullable property \'$name\'');
       }
     }
 
@@ -106,11 +106,25 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
           return literalString(defaultValue);
         }
 
+        if (defaultValue.trim().isEmpty) {
+          final name = _getFullName(true);
+          throw StateError(
+              'The default value specified for property \'$name\' must not be empty');
+        }
+
         return CodeExpression(Code(defaultValue));
       }
     }
 
     return null;
+  }
+
+  String _getFullName(bool withType) {
+    if (withType) {
+      return '${property.type} $objectName.${property.name}';
+    }
+
+    return '$objectName.${property.name}';
   }
 
   bool _needCheckNullSafety() {
@@ -130,8 +144,9 @@ class PropertyGenerator extends Generator<Field> with CommentsGenerator {
   }
 
   void _setType(FieldBuilder b) {
-    final type = getField(property.type,
-        'The type of property \'${property.name}\' of JSON object \'$objectName\' is not specified.');
+    final name = _getFullName(false);
+    final type = getField(
+        property.type, 'The type of property \'$name}\' is not specified.');
     b.type = refer(type);
   }
 }
