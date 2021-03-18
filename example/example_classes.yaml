@@ -7,14 +7,14 @@ format:
 
 checkNullSafety: true
 
-jsonObjects:
+classes:
 - name: Category
-  properties:
+  fields:
   - { name: id, type: int? }
   - { name: name, type: String? }
-  - { name: products, type: List<Product>, defaultValue: [] }
+  - { name: products, type: List<Product>, jsonKey: { defaultValue: [] } }
 
 - name: Product
-  properties:
+  fields:
   - { name: id, type: int? }
   - { name: name, type: String? }

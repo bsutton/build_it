@@ -1,3 +1,8 @@
+## 0.2.5
+
+- Breaking changes (in favor of maximum compatibility with package `json_serializable`): changed the configuration specification of the `build_it:json` generator
+- The `build_it:json` generator now maximally compatible with the `json_serializable` package
+
 ## 0.2.4
 
 - Added (new feature) `post process` build support (not very well tested yet)

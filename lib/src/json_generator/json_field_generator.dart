@@ -3,8 +3,10 @@
 part of '../json_generator.dart';
 
 class JsonFieldGenerator extends Generator<_code_builder.Field>
-    with CommentsGenerator {
+    with DocsAndAnnotationsGenerator {
   final bool checkNullSafety;
+
+  final String className;
 
   final Field field;
 
@@ -12,25 +14,23 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
 
   final bool immutable;
 
-  final String objectName;
-
   JsonFieldGenerator(
       {@required this.checkNullSafety,
+      @required this.className,
       @required this.field,
       @required this.immutable,
-      @required this.index,
-      @required this.objectName});
+      @required this.index});
 
   @override
   _code_builder.Field generate() {
-    return _code_builder.Field((b) {
-      _addComments(b);
-      _addAnnotations(b);
-      _setName(b);
-      _setType(b);
-      _setMutability(b);
+    return _code_builder.Field((fieldBuilder) {
+      addComments(fieldBuilder, field.comments);
+      _addAnnotations(fieldBuilder);
+      _setName(fieldBuilder);
+      _setType(fieldBuilder);
+      _setMutability(fieldBuilder);
       if (field.jsonKey != null) {
-        _addJsonKeyAnnotation(b, field.jsonKey);
+        _addJsonKeyAnnotation(fieldBuilder, field.jsonKey);
       }
 
       if (_needCheckNullSafety()) {
@@ -39,25 +39,18 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
     });
   }
 
-  void _addAnnotation(FieldBuilder b, Expression annotation) {
-    b.annotations.add(annotation);
-  }
-
-  void _addAnnotations(FieldBuilder b) {
-    for (final annotation in field.annotations) {
-      _addAnnotation(b, refer(annotation));
+  void _addAnnotations(FieldBuilder fieldBuilder) {
+    final annotations = field.annotations;
+    for (final annotation in annotations) {
+      addAnnotation(fieldBuilder, refer(annotation));
     }
   }
 
-  void _addComments(FieldBuilder b) {
-    if (field.comments != null) {
-      b.docs.addAll(toDocComments(field.comments));
-    }
-  }
-
-  void _addJsonKeyAnnotation(FieldBuilder b, JsonKeyAnnotation jsonKey) {
+  void _addJsonKeyAnnotation(
+      FieldBuilder fieldBuilder, JsonKeyAnnotation jsonKey) {
     final namedArguments = <String, Expression>{};
     final map = {
+      'defaultValue': jsonKey.defaultValue,
       'disallowNullValue': jsonKey.disallowNullValue,
       'fromJson': jsonKey.fromJson$,
       'ignore': jsonKey.ignore,
@@ -77,7 +70,7 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
 
     if (namedArguments.isNotEmpty) {
       final annotation = refer('JsonKey').call([], namedArguments);
-      _addAnnotation(b, annotation);
+      addAnnotation(fieldBuilder, annotation);
     }
   }
 
@@ -89,7 +82,7 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
       if (!isNullable && _needCheckNullSafety()) {
         final name = _getFullName(true);
         throw StateError(
-            'No default value specified for non-nullable property \'$name\'');
+            'No default value specified for non-nullable field \'$name\'');
       }
     }
   }
@@ -144,32 +137,32 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
 
   String _getFullName(bool withType) {
     if (withType) {
-      return '${field.type} $objectName.${field.name}';
+      return '${field.type} $className.${field.name}';
     }
 
-    return '$objectName.${field.name}';
+    return '$className.${field.name}';
   }
 
   bool _needCheckNullSafety() {
     return checkNullSafety == true;
   }
 
-  void _setMutability(FieldBuilder b) {
+  void _setMutability(FieldBuilder fieldBuilder) {
     if (immutable == true) {
-      b.modifier = FieldModifier.final$;
+      fieldBuilder.modifier = FieldModifier.final$;
     }
   }
 
-  void _setName(FieldBuilder b) {
+  void _setName(FieldBuilder fieldBuilder) {
     final name = getField(field.name,
-        'The name of the property with index $index of JSON object \'$objectName\' is not specified');
-    b.name = name;
+        'The name of the field with index $index of JSON class \'$className\' is not specified');
+    fieldBuilder.name = name;
   }
 
-  void _setType(FieldBuilder b) {
+  void _setType(FieldBuilder fieldBuilder) {
     final name = _getFullName(false);
-    final type = getField(
-        field.type, 'The type of property \'$name}\' is not specified.');
-    b.type = refer(type);
+    final type =
+        getField(field.type, 'The type of field \'$name}\' is not specified.');
+    fieldBuilder.type = refer(type);
   }
 }

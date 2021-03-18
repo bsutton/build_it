@@ -20,7 +20,9 @@ class JsonLibraryGenerator extends Generator<void> {
     _addDirectives('export', library.exports);
     _addDirectives('import', library.imports);
     _addDirectives('part', library.parts);
-    _generateJsonObjects();
+    _generateJsonClasses();
+    _generateJsonEnums();
+    _generateCode();
   }
 
   void _addDirectives(String type, List<String> urls) {
@@ -40,16 +42,31 @@ class JsonLibraryGenerator extends Generator<void> {
     directives.add(directive);
   }
 
-  void _generateJsonObjects() {
-    final list = library.classes;
-    for (var i = 0; i < list.length; i++) {
-      final element = list[i];
+  void _generateCode() {
+    if (library.code != null) {
+      specs.add(Code(library.code));
+    }
+  }
+
+  void _generateJsonClasses() {
+    final classes = library.classes;
+    for (var i = 0; i < classes.length; i++) {
+      final element = classes[i];
       final g = JsonClassGenerator(
           clazz: element,
           immutable: library.immutable,
           index: i,
           checkNullSafety: library.checkNullSafety);
+      final result = g.generate();
+      specs.add(result);
+    }
+  }
 
+  void _generateJsonEnums() {
+    final enums = library.enums;
+    for (var i = 0; i < enums.length; i++) {
+      final element = enums[i];
+      final g = JsonEnumGenerator(enum$: element, index: i);
       final result = g.generate();
       specs.add(result);
     }

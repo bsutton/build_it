@@ -8,12 +8,15 @@ part of 'json_models.g.dart';
 
 Class _$ClassFromJson(Map<String, dynamic> json) {
   return Class(
-    annotations:
-        (json['annotations'] as List<dynamic>).map((e) => e as String).toList(),
+    annotations: (json['annotations'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
     comments: json['comments'] as String?,
-    fields: (json['fields'] as List<dynamic>)
-        .map((e) => Field.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    fields: (json['fields'] as List<dynamic>?)
+            ?.map((e) => Field.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
     immutable: json['immutable'] as bool?,
     jsonSerializable: json['jsonSerializable'] == null
         ? null
@@ -34,23 +37,54 @@ Map<String, dynamic> _$ClassToJson(Class instance) => <String, dynamic>{
 
 Enum _$EnumFromJson(Map<String, dynamic> json) {
   return Enum(
-    value: json['value'] as String,
-    jsonValue: json['jsonValue'] == null
-        ? null
-        : JsonValueAnnotation.fromJson(
-            json['jsonValue'] as Map<String, dynamic>),
+    annotations: (json['annotations'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
+    comments: json['comments'] as String?,
+    name: json['name'] as String?,
+    values: (json['values'] as List<dynamic>?)
+            ?.map((e) => EnumValue.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
   );
 }
 
 Map<String, dynamic> _$EnumToJson(Enum instance) => <String, dynamic>{
-      'value': instance.value,
+      'annotations': instance.annotations,
+      'comments': instance.comments,
+      'name': instance.name,
+      'values': instance.values,
+    };
+
+EnumValue _$EnumValueFromJson(Map<String, dynamic> json) {
+  return EnumValue(
+    annotations: (json['annotations'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
+    comments: json['comments'] as String?,
+    jsonValue: json['jsonValue'] == null
+        ? null
+        : JsonValueAnnotation.fromJson(
+            json['jsonValue'] as Map<String, dynamic>),
+    name: json['name'] as String,
+  );
+}
+
+Map<String, dynamic> _$EnumValueToJson(EnumValue instance) => <String, dynamic>{
+      'annotations': instance.annotations,
+      'comments': instance.comments,
       'jsonValue': instance.jsonValue,
+      'name': instance.name,
     };
 
 Field _$FieldFromJson(Map<String, dynamic> json) {
   return Field(
-    annotations:
-        (json['annotations'] as List<dynamic>).map((e) => e as String).toList(),
+    annotations: (json['annotations'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
     comments: json['comments'] as String?,
     jsonKey: json['jsonKey'] == null
         ? null
@@ -72,12 +106,12 @@ JsonKeyAnnotation _$JsonKeyAnnotationFromJson(Map<String, dynamic> json) {
   return JsonKeyAnnotation(
     defaultValue: json['defaultValue'],
     disallowNullValue: json['disallowNullValue'] as bool?,
-    fromJson$: json[r'fromJson$'] as String?,
+    fromJson$: json['fromJson'] as String?,
     ignore: json['ignore'] as bool?,
     includeIfNull: json['includeIfNull'] as bool?,
     name: json['name'] as String?,
     required: json['required'] as bool?,
-    toJson$: json[r'toJson$'] as String?,
+    toJson$: json['toJson'] as String?,
     unknownEnumValue: json['unknownEnumValue'],
   );
 }
@@ -86,12 +120,12 @@ Map<String, dynamic> _$JsonKeyAnnotationToJson(JsonKeyAnnotation instance) =>
     <String, dynamic>{
       'defaultValue': instance.defaultValue,
       'disallowNullValue': instance.disallowNullValue,
-      r'fromJson$': instance.fromJson$,
+      'fromJson': instance.fromJson$,
       'ignore': instance.ignore,
       'includeIfNull': instance.includeIfNull,
       'name': instance.name,
       'required': instance.required,
-      r'toJson$': instance.toJson$,
+      'toJson': instance.toJson$,
       'unknownEnumValue': instance.unknownEnumValue,
     };
 
@@ -141,28 +175,36 @@ Map<String, dynamic> _$JsonValueAnnotationToJson(
 Library _$LibraryFromJson(Map<String, dynamic> json) {
   return Library(
     checkNullSafety: json['checkNullSafety'] as bool?,
-    classes: (json['classes'] as List<dynamic>)
-        .map((e) => Class.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    enums: (json['enums'] as List<dynamic>)
-        .map((e) => Enum.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    classes: (json['classes'] as List<dynamic>?)
+            ?.map((e) => Class.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    code: json['code'] as String?,
+    enums: (json['enums'] as List<dynamic>?)
+            ?.map((e) => Enum.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
     exports:
-        (json['exports'] as List<dynamic>).map((e) => e as String).toList(),
+        (json['exports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
     immutable: json['immutable'] as bool?,
     imports:
-        (json['imports'] as List<dynamic>).map((e) => e as String).toList(),
+        (json['imports'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
     jsonSerializable: json['jsonSerializable'] == null
         ? null
         : JsonSerializableAnnotation.fromJson(
             json['jsonSerializable'] as Map<String, dynamic>),
-    parts: (json['parts'] as List<dynamic>).map((e) => e as String).toList(),
+    parts:
+        (json['parts'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+            [],
   );
 }
 
 Map<String, dynamic> _$LibraryToJson(Library instance) => <String, dynamic>{
       'checkNullSafety': instance.checkNullSafety,
       'classes': instance.classes,
+      'code': instance.code,
       'enums': instance.enums,
       'exports': instance.exports,
       'immutable': instance.immutable,

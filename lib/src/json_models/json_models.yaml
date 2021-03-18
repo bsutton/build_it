@@ -37,33 +37,61 @@ classes:
 - name: Enum
   comments: "Enum is used to describe the JSON enum"
   fields:
-  - name: value
-    type: String
-    comments: "Enumeration value name"
-  - name: jsonValue
-    type: JsonValueAnnotation?
-    comments: "Represents annotation JsonValue"
-
-- name: Field
-  comments: "Field is used to describe the JSON field"
-  fields:
   - name: annotations
     type: List<String>
-    comments: "Metadata describing the JSON field"
+    comments: "Metadata describing the JSON enum"
     jsonKey:    
       defaultValue: []
   - name: comments
     type: String?
-    comments: "Documenting comments for JSON field"
+    comments: "Documenting comments for JSON enum" 
+  - name: name
+    type: String?
+    comments: "JSON enum name"
+  - name: values
+    type: List<EnumValue>
+    comments: "List of enumeration values"
+    jsonKey:
+      defaultValue: []
+
+- name: EnumValue
+  comments: "Enum value is used to describe the JSON enum value"
+  fields:
+  - name: annotations
+    type: List<String>
+    comments: "Metadata describing the JSON enum value"
+    jsonKey:    
+      defaultValue: []
+  - name: comments
+    type: String?
+    comments: "Documenting comments for JSON enum value" 
+  - name: jsonValue
+    type: JsonValueAnnotation?
+    comments: "Represents annotation JsonValue"
+  - name: name
+    type: String
+    comments: "Enumeration value name"
+
+- name: Field
+  comments: "Field is used to describe the JSON class field"
+  fields:
+  - name: annotations
+    type: List<String>
+    comments: "Metadata describing the JSON class field"
+    jsonKey:    
+      defaultValue: []
+  - name: comments
+    type: String?
+    comments: "Documenting comments for JSON class field"
   - name: jsonKey
     type: JsonKeyAnnotation?
     comments: "Represents annotation JsonKey"
   - name: name
     type: String?
-    comments: "JSON field name"
+    comments: "JSON class field name"
   - name: type
     type: String?
-    comments: "JSON field type"
+    comments: "JSON class field type"
 
 - name: JsonKeyAnnotation
   comments: "Represents annotation JsonKey"
@@ -132,6 +160,9 @@ classes:
     comments: "List of JSON classes"
     jsonKey:
       defaultValue: []
+  - name: code
+    type: String?
+    comments: "Source code to be inserted into the library"
   - name: enums
     type: List<Enum>
     comments: "List of JSON enums"
