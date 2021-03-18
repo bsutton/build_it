@@ -8,116 +8,231 @@ part 'json_models.g.g.dart';
 // build_it: build_it:json
 // **************************************************************************
 
-// @build_it : combine_into_single_file
-/// JsonObject is used to describe the JSON object
+/// Class is used to describe the JSON class
 @JsonSerializable()
-class JsonObject {
-  JsonObject(
+class Class {
+  Class(
       {required this.annotations,
       this.comments,
+      required this.fields,
       this.immutable,
-      this.name,
-      required this.properties});
+      this.jsonSerializable,
+      this.name});
 
   /// Creates an object from a JSON representation
-  factory JsonObject.fromJson(Map<String, dynamic> json) =>
-      _$JsonObjectFromJson(json);
+  factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
 
-  /// Metadata describing the JSON object
-  @JsonKey(defaultValue: [])
+  /// Metadata describing the JSON class
   List<String> annotations;
 
-  /// Documenting comments for JSON object
+  /// Documenting comments for JSON class
   String? comments;
 
-  /// Indicates whether JSON object is immutable or not
+  /// List of JSON fields
+  List<Field> fields;
+
+  /// Indicates the immutability of class fields
   bool? immutable;
 
-  /// JSON object name
+  /// Represents annotation JsonSerializable
+  JsonSerializableAnnotation? jsonSerializable;
+
+  /// JSON class name
   String? name;
 
-  /// List of JSON object properties
-  @JsonKey(defaultValue: [])
-  List<Property> properties;
-
   /// Returns a JSON representation of the object
-  Map<String, dynamic> toJson() => _$JsonObjectToJson(this);
+  Map<String, dynamic> toJson() => _$ClassToJson(this);
 }
 
-/// JsonObjects is used to describe the collection of JSON objects
+/// Enum is used to describe the JSON enum
 @JsonSerializable()
-class JsonObjects {
-  JsonObjects(
-      {this.checkNullSafety,
-      required this.exports,
-      this.immutable,
-      required this.imports,
-      required this.jsonObjects,
-      required this.parts});
+class Enum {
+  Enum({required this.value, this.jsonValue});
 
   /// Creates an object from a JSON representation
-  factory JsonObjects.fromJson(Map<String, dynamic> json) =>
-      _$JsonObjectsFromJson(json);
+  factory Enum.fromJson(Map<String, dynamic> json) => _$EnumFromJson(json);
 
-  /// Indicates the need for a null safety check during code generation
-  bool? checkNullSafety;
+  /// Enumeration value name
+  String value;
 
-  /// List of used export directives
-  @JsonKey(defaultValue: [])
-  List<String> exports;
-
-  /// Indicates whether JSON objects is immutable or not
-  bool? immutable;
-
-  /// List of used import directives
-  @JsonKey(defaultValue: [])
-  List<String> imports;
-
-  /// List of JSON objects
-  @JsonKey(defaultValue: [])
-  List<JsonObject> jsonObjects;
-
-  /// List of used part directives
-  @JsonKey(defaultValue: [])
-  List<String> parts;
+  /// Represents annotation JsonValue
+  JsonValueAnnotation? jsonValue;
 
   /// Returns a JSON representation of the object
-  Map<String, dynamic> toJson() => _$JsonObjectsToJson(this);
+  Map<String, dynamic> toJson() => _$EnumToJson(this);
 }
 
+/// Field is used to describe the JSON field
 @JsonSerializable()
-class Property {
-  Property(
+class Field {
+  Field(
       {required this.annotations,
       this.comments,
-      this.defaultValue,
-      this.key,
+      this.jsonKey,
       this.name,
       this.type});
 
   /// Creates an object from a JSON representation
-  factory Property.fromJson(Map<String, dynamic> json) =>
-      _$PropertyFromJson(json);
+  factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
-  /// Metadata describing the JSON object property
-  @JsonKey(defaultValue: [])
+  /// Metadata describing the JSON field
   List<String> annotations;
 
-  /// Documenting comments for JSON object property
+  /// Documenting comments for JSON field
   String? comments;
 
-  /// Documenting comments for JSON object property
-  Object? defaultValue;
+  /// Represents annotation JsonKey
+  JsonKeyAnnotation? jsonKey;
 
-  /// The key in a JSON map
-  String? key;
-
-  /// JSON object property name
+  /// JSON field name
   String? name;
 
-  /// JSON object property type
+  /// JSON field type
   String? type;
 
   /// Returns a JSON representation of the object
-  Map<String, dynamic> toJson() => _$PropertyToJson(this);
+  Map<String, dynamic> toJson() => _$FieldToJson(this);
+}
+
+/// Represents annotation JsonKey
+@JsonSerializable()
+class JsonKeyAnnotation {
+  JsonKeyAnnotation(
+      {this.defaultValue,
+      this.disallowNullValue,
+      this.fromJson$,
+      this.ignore,
+      this.includeIfNull,
+      this.name,
+      this.required,
+      this.toJson$,
+      this.unknownEnumValue});
+
+  /// Creates an object from a JSON representation
+  factory JsonKeyAnnotation.fromJson(Map<String, dynamic> json) =>
+      _$JsonKeyAnnotationFromJson(json);
+
+  Object? defaultValue;
+
+  bool? disallowNullValue;
+
+  String? fromJson$;
+
+  bool? ignore;
+
+  bool? includeIfNull;
+
+  String? name;
+
+  bool? required;
+
+  String? toJson$;
+
+  Object? unknownEnumValue;
+
+  /// Returns a JSON representation of the object
+  Map<String, dynamic> toJson() => _$JsonKeyAnnotationToJson(this);
+}
+
+/// Represents annotation JsonSerializable
+@JsonSerializable()
+class JsonSerializableAnnotation {
+  JsonSerializableAnnotation(
+      {this.anyMap,
+      this.checked,
+      this.createFactory,
+      this.createToJson,
+      this.disallowUnrecognizedKeys,
+      this.explicitToJson,
+      this.fieldRename,
+      this.genericArgumentFactories,
+      this.ignoreUnannotated,
+      this.includeIfNull});
+
+  /// Creates an object from a JSON representation
+  factory JsonSerializableAnnotation.fromJson(Map<String, dynamic> json) =>
+      _$JsonSerializableAnnotationFromJson(json);
+
+  bool? anyMap;
+
+  bool? checked;
+
+  bool? createFactory;
+
+  bool? createToJson;
+
+  bool? disallowUnrecognizedKeys;
+
+  bool? explicitToJson;
+
+  String? fieldRename;
+
+  bool? genericArgumentFactories;
+
+  bool? ignoreUnannotated;
+
+  bool? includeIfNull;
+
+  /// Returns a JSON representation of the object
+  Map<String, dynamic> toJson() => _$JsonSerializableAnnotationToJson(this);
+}
+
+/// Represents annotation JsonValue
+@JsonSerializable()
+class JsonValueAnnotation {
+  JsonValueAnnotation({required this.value});
+
+  /// Creates an object from a JSON representation
+  factory JsonValueAnnotation.fromJson(Map<String, dynamic> json) =>
+      _$JsonValueAnnotationFromJson(json);
+
+  Object value;
+
+  /// Returns a JSON representation of the object
+  Map<String, dynamic> toJson() => _$JsonValueAnnotationToJson(this);
+}
+
+/// Library is used to describe the JSON library
+@JsonSerializable()
+class Library {
+  Library(
+      {this.checkNullSafety,
+      required this.classes,
+      required this.enums,
+      required this.exports,
+      this.immutable,
+      required this.imports,
+      this.jsonSerializable,
+      required this.parts});
+
+  /// Creates an object from a JSON representation
+  factory Library.fromJson(Map<String, dynamic> json) =>
+      _$LibraryFromJson(json);
+
+  /// Indicates the need for a null safety check during code generation
+  bool? checkNullSafety;
+
+  /// List of JSON classes
+  List<Class> classes;
+
+  /// List of JSON enums
+  List<Enum> enums;
+
+  /// List of export directives
+  List<String> exports;
+
+  /// Indicates immutability
+  bool? immutable;
+
+  /// List of import directives
+  List<String> imports;
+
+  /// Default values for annotation JsonSerializable
+  JsonSerializableAnnotation? jsonSerializable;
+
+  /// List of part directives
+  List<String> parts;
+
+  /// Returns a JSON representation of the object
+  Map<String, dynamic> toJson() => _$LibraryToJson(this);
 }

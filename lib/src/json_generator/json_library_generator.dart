@@ -2,24 +2,24 @@
 
 part of '../json_generator.dart';
 
-class JsonObjectsGenerator extends Generator<void> {
+class JsonLibraryGenerator extends Generator<void> {
   final List<Directive> directives;
 
-  final JsonObjects jsonObjects;
+  final Library library;
 
   final List<Spec> specs;
 
-  JsonObjectsGenerator(
+  JsonLibraryGenerator(
       {@required this.directives,
-      @required this.jsonObjects,
+      @required this.library,
       @required this.specs});
 
   @override
   void generate() {
     _addImportJsonAnnotation();
-    _addDirectives('export', jsonObjects.exports);
-    _addDirectives('import', jsonObjects.imports);
-    _addDirectives('part', jsonObjects.parts);
+    _addDirectives('export', library.exports);
+    _addDirectives('import', library.imports);
+    _addDirectives('part', library.parts);
     _generateJsonObjects();
   }
 
@@ -41,14 +41,14 @@ class JsonObjectsGenerator extends Generator<void> {
   }
 
   void _generateJsonObjects() {
-    final list = jsonObjects.jsonObjects;
+    final list = library.classes;
     for (var i = 0; i < list.length; i++) {
       final element = list[i];
-      final g = JsonObjectGenerator(
-          jsonObject: element,
-          immutable: jsonObjects.immutable,
+      final g = JsonClassGenerator(
+          clazz: element,
+          immutable: library.immutable,
           index: i,
-          checkNullSafety: jsonObjects.checkNullSafety);
+          checkNullSafety: library.checkNullSafety);
 
       final result = g.generate();
       specs.add(result);

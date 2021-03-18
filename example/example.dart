@@ -1,5 +1,5 @@
 import 'package:build_it/build_it_helper.dart';
-import 'package:build_it/json_helper.dart';
+import 'package:json_helpers/json_helpers.dart';
 
 Future<void> main(List<String> args, [message]) async {
   return await buildIt(args, message, _build);
@@ -12,16 +12,13 @@ void main() {
 }
 ''';
 
-  final data = config.data.decodeJson((e) => Data.fromMap(e));
+  final data = config.data.json((e) => Data.fromMap(e));
   final name = data.name;
-
   final code = <String>[];
   final template = _template.replaceAll('{{NAME}}', name);
   code.add(template);
-
   final directives = <Directive>[];
   directives.add(Directive(type: 'import', url: 'dart:io'));
-
   return BuildResult(code: code.join('\n'), directives: directives);
 }
 

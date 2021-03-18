@@ -2,24 +2,25 @@
 
 part of '../json_generator.dart';
 
-class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
+class JsonClassGenerator extends Generator<_code_builder.Class>
+    with CommentsGenerator {
   final bool checkNullSafety;
+
+  final Class clazz;
 
   final bool immutable;
 
   final int index;
 
-  final JsonObject jsonObject;
-
-  JsonObjectGenerator(
+  JsonClassGenerator(
       {@required this.checkNullSafety,
+      @required this.clazz,
       @required this.index,
-      @required this.immutable,
-      @required this.jsonObject});
+      @required this.immutable});
 
   @override
-  Class generate() {
-    return Class((cb) {
+  _code_builder.Class generate() {
+    return _code_builder.Class((cb) {
       _addComments(cb);
       _addAnnotations(cb);
       _setName(cb);
@@ -46,14 +47,14 @@ class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
   }
 
   void _addComments(ClassBuilder b) {
-    if (jsonObject.comments != null) {
-      b.docs.addAll(toDocComments(jsonObject.comments));
+    if (clazz.comments != null) {
+      b.docs.addAll(toDocComments(clazz.comments));
     }
   }
 
   void _addContructor(ClassBuilder cb) {
     final result = Constructor((b) {
-      final properties = jsonObject.properties;
+      final properties = clazz.fields;
       for (final property in properties) {
         b.optionalParameters.add(Parameter((b) {
           b.named = true;
@@ -81,22 +82,21 @@ class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
       }));
 
       b.lambda = true;
-      b.body =
-          refer('_\$${jsonObject.name}FromJson').call([refer('json')]).code;
+      b.body = refer('_\$${clazz.name}FromJson').call([refer('json')]).code;
     });
 
     cb.constructors.add(result);
   }
 
   void _addFields(ClassBuilder cb) {
-    final list = jsonObject.properties;
+    final list = clazz.fields;
     for (var i = 0; i < list.length; i++) {
       final element = list[i];
-      final g = PropertyGenerator(
+      final g = JsonFieldGenerator(
           immutable: _isImmutable(),
           index: i,
-          objectName: jsonObject.name,
-          property: element,
+          objectName: clazz.name,
+          field: element,
           checkNullSafety: _needCheckNullSafety());
       final result = g.generate();
       cb.fields.add(result);
@@ -110,19 +110,19 @@ class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
       b.name = 'toJson';
       b.returns = refer('Map<String, dynamic>');
       b.lambda = true;
-      b.body = refer('_\$${jsonObject.name}ToJson').call([refer('this')]).code;
+      b.body = refer('_\$${clazz.name}ToJson').call([refer('this')]).code;
     });
 
     cb.methods.add(result);
   }
 
   List<String> _getAnnotations() {
-    return jsonObject.annotations;
+    return clazz.annotations;
   }
 
   bool _isImmutable() {
-    if (jsonObject.immutable != null) {
-      return jsonObject.immutable;
+    if (clazz.immutable != null) {
+      return clazz.immutable;
     }
 
     return immutable == true;
@@ -133,7 +133,7 @@ class JsonObjectGenerator extends Generator<Class> with CommentsGenerator {
   }
 
   void _setName(ClassBuilder b) {
-    final name = getField(jsonObject.name,
+    final name = getField(clazz.name,
         'The name of JSON object with index $index is not specified');
     b.name = name;
   }
