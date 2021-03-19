@@ -1,5 +1,5 @@
 name: build_it
-version: 0.2.5
+version: 0.2.6
 description: The `build_it`is a builder that makes publicly available third-party source code generators and runs them during the build process for rapid development.
 homepage: https://github.com/mezoni/build_it
 environment:

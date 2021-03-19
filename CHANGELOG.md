@@ -1,3 +1,8 @@
+## 0.2.6
+
+- Fixed bugs with inconsistency in the generated code and the values of the `JsonSerializable` parameters
+- Fixed bugs in `_GeneratorPathResolver` with processing error messages
+
 ## 0.2.5
 
 - Breaking changes (in favor of maximum compatibility with package `json_serializable`): changed the configuration specification of the `build_it:json` generator

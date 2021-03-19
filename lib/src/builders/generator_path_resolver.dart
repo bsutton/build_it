@@ -41,15 +41,17 @@ class _GeneratorPathResolver {
     }
 
     if (generatorAlias.isEmpty) {
-      _addError('The generator path must be specified in the generator name');
+      return _addError(
+          'The generator path must be specified in the generator name');
     }
 
     if (packageName.isEmpty) {
-      _addError('The generator path must be specified in the generator name');
+      return _addError(
+          'The generator path must be specified in the generator name');
     }
 
     if (!packages.containsKey(packageName)) {
-      _addError(
+      return _addError(
           'Unable to find package \'$packageName\' for generator \'$name\'');
     }
 
