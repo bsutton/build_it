@@ -11,7 +11,8 @@ import 'package:path/path.dart' as _path;
 import 'src/code_combiner.dart';
 
 Future<void> main(List<String> args, [message]) async {
-  await buildIt(args, message, _build, postBuild: _postBuild);
+  //await buildIt(args, message, _build, postBuild: _postBuild);
+  await buildIt(args, message, _build);
 }
 
 Future<BuildResult> _build(BuildConfig config) async {
@@ -27,7 +28,6 @@ Future<BuildResult> _build(BuildConfig config) async {
 }
 
 Future<void> _postBuild(PostBuildConfig config) async {
-  return;
   final input = config.input;
   final basePath = _path.dirname(input);
   String fileReader(String path) {
