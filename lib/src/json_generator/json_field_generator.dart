@@ -6,31 +6,31 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
     with DocsAndAnnotationsGenerator {
   final bool checkNullSafety;
 
-  final String className;
-
-  final Field field;
+  final Field element;
 
   final int index;
 
   final bool immutable;
 
+  final Class parent;
+
   JsonFieldGenerator(
       {@required this.checkNullSafety,
-      @required this.className,
-      @required this.field,
+      @required this.element,
       @required this.immutable,
-      @required this.index});
+      @required this.index,
+      @required this.parent});
 
   @override
   _code_builder.Field generate() {
     return _code_builder.Field((fieldBuilder) {
-      addComments(fieldBuilder, field.comments);
+      addComments(fieldBuilder, element.comments);
       _addAnnotations(fieldBuilder);
       _setName(fieldBuilder);
       _setType(fieldBuilder);
       _setMutability(fieldBuilder);
-      if (field.jsonKey != null) {
-        _addJsonKeyAnnotation(fieldBuilder, field.jsonKey);
+      if (element.jsonKey != null) {
+        _addJsonKeyAnnotation(fieldBuilder, element.jsonKey);
       }
 
       if (_needCheckNullSafety()) {
@@ -40,7 +40,7 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
   }
 
   void _addAnnotations(FieldBuilder fieldBuilder) {
-    final annotations = field.annotations;
+    final annotations = element.annotations;
     for (final annotation in annotations) {
       addAnnotation(fieldBuilder, refer(annotation));
     }
@@ -64,7 +64,11 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
     for (final key in map.keys) {
       final value = map[key];
       if (value != null) {
-        namedArguments[key] = literal(value);
+        if (key == 'defaultValue') {
+          namedArguments[key] = _getDefaultValue();
+        } else {
+          namedArguments[key] = literal(value);
+        }
       }
     }
 
@@ -77,7 +81,7 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
   void _checkNullSafety() {
     final defaultValue = _getDefaultValue();
     if (defaultValue == null) {
-      final type = field.type.trim();
+      final type = element.type.trim();
       final isNullable = type.endsWith('?');
       if (!isNullable && _needCheckNullSafety()) {
         final name = _getFullName(true);
@@ -88,11 +92,11 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
   }
 
   Expression _getDefaultValue() {
-    if (field.jsonKey == null) {
+    if (element.jsonKey == null) {
       return null;
     }
 
-    final defaultValue = field.jsonKey.defaultValue;
+    final defaultValue = element.jsonKey.defaultValue;
     if (defaultValue == null) {
       return null;
     }
@@ -118,7 +122,7 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
     }
 
     if (defaultValue is String) {
-      final type = field.type.trim().replaceAll(' ', '');
+      final type = element.type.trim().replaceAll(' ', '');
       if (type == 'String' || type == 'String?') {
         return literalString(defaultValue);
       }
@@ -136,11 +140,13 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
   }
 
   String _getFullName(bool withType) {
+    final parentName = parent.name;
+    final elementName = element.name;
     if (withType) {
-      return '${field.type} $className.${field.name}';
+      return '${element.type} $parentName.$elementName';
     }
 
-    return '$className.${field.name}';
+    return '$parentName.$elementName';
   }
 
   bool _needCheckNullSafety() {
@@ -154,15 +160,16 @@ class JsonFieldGenerator extends Generator<_code_builder.Field>
   }
 
   void _setName(FieldBuilder fieldBuilder) {
-    final name = getField(field.name,
-        'The name of the field with index $index of JSON class \'$className\' is not specified');
+    final parentName = parent.name;
+    final name = getField(element.name,
+        'The name of the field with index $index of JSON class \'$parentName\' is not specified');
     fieldBuilder.name = name;
   }
 
   void _setType(FieldBuilder fieldBuilder) {
     final name = _getFullName(false);
-    final type =
-        getField(field.type, 'The type of field \'$name}\' is not specified.');
+    final type = getField(
+        element.type, 'The type of field \'$name}\' is not specified.');
     fieldBuilder.type = refer(type);
   }
 }

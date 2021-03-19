@@ -5,7 +5,7 @@ class CodeCombiner {
 
   CodeCombiner(this.fileReader);
 
-  String? combine(String path, {FeatureSet? featureSet}) {
+  String combine(String path, {FeatureSet? featureSet}) {
     final content = fileReader(path);
     final parseResult =
         parseString(content: content, path: path, featureSet: featureSet);
@@ -30,7 +30,7 @@ class CodeCombiner {
     final textSplitter = TextSplitter();
     final error = textSplitter.split(chunks, fragments);
     if (error != null) {
-      return null;
+      _error(error);
     }
 
     final part = chunks
@@ -59,7 +59,7 @@ class CodeCombiner {
       final textSplitter = TextSplitter();
       final error = textSplitter.split(chunks, fragments);
       if (error != null) {
-        return null;
+        _error(error);
       }
 
       final part = chunks
@@ -69,5 +69,10 @@ class CodeCombiner {
     }
 
     return parts.join('');
+  }
+
+  Never _error(TextSplitterError error) {
+    final message = 'Text splitting error';
+    throw StateError(message);
   }
 }

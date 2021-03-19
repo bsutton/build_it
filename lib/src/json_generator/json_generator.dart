@@ -20,7 +20,7 @@ class JsonGenerator {
   String generate() {
     final specs = <Spec>[];
     final g = JsonLibraryGenerator(
-        directives: directives, library: library, specs: specs);
+        directives: directives, element: library, specs: specs);
     g.generate();
     final fullPath = false;
     final basename = _path.basenameWithoutExtension(output);

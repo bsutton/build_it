@@ -77,9 +77,9 @@ dev_dependencies:
   json_serializable: ^4.0.2 
 ```
 
-Suppose you want to create a generator named `foo`. 
+Suppose you want to create a generator named `example`. 
 
-Create a file named `foo_build_it.dart` in the` lib` folder. 
+Create a file named `example_build_it.dart` in the` lib` folder. 
 
 Add the following directive (for data exchange with the builder):
 
@@ -99,7 +99,7 @@ And add some code to it.
 
 ```dart
 import 'package:build_it/build_it_helper.dart';
-import 'package:build_it/json_helper.dart';
+import 'package:json_helpers/json_helpers.dart';
 
 Future<void> main(List<String> args, [message]) async {
   return await buildIt(args, message, _build);
@@ -112,16 +112,13 @@ void main() {
 }
 ''';
 
-  final data = config.data.decodeJson((e) => Data.fromMap(e));
+  final data = config.data.json((e) => Data.fromMap(e));
   final name = data.name;
-
   final code = <String>[];
   final template = _template.replaceAll('{{NAME}}', name);
   code.add(template);
-
   final directives = <Directive>[];
   directives.add(Directive(type: 'import', url: 'dart:io'));
-
   return BuildResult(code: code.join('\n'), directives: directives);
 }
 
@@ -141,23 +138,22 @@ class Data {
 
 Then create your config file:
 
-`foo_test.yaml`
+`example_text.yaml`
 
 ```yaml
 ---
 format:
   name: build_it
-  language:
-    version: "2.10" # If you need it
-  generator:    
-    name: build_it_test:foo
+  generator:
+    name: build_it_test:example
 ---
 
-name: "Jack"
+name: Jack
+
 ```
 
 We will assume that your package is named `build_it_test`.   
-Accordingly, the public available name of your generator is `build_it_test:foo`.  
+Accordingly, the public available name of your generator is `build_it_test:example`.  
 
 Everything is ready, you can start the build process:
 
@@ -165,7 +161,7 @@ Everything is ready, you can start the build process:
 
 Below is the build (and generation) result:
 
-`foo_test.g.dart`
+`example_text.g.dart`
 
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
@@ -173,7 +169,7 @@ Below is the build (and generation) result:
 import 'dart:io';
 
 // **************************************************************************
-// build_it: build_it_test:foo
+// build_it: build_it_test:example
 // **************************************************************************
 
 void main() {
@@ -199,7 +195,7 @@ Using the `json` generator from the` build_it` package can make this work a litt
 
 Example of configuration for `JSON` generator:
 
-`example_objects.yaml`
+`example_classes.yaml`
 
 ```yaml
 ---
@@ -210,40 +206,55 @@ format:
 ---
 
 checkNullSafety: true
+jsonSerializable:
+  anyMap: true
 
-jsonObjects:
+classes:
 - name: Category
-  properties:
+  fields:
   - { name: id, type: int? }
   - { name: name, type: String? }
-  - { name: products, type: List<Product>, defaultValue: [] }
+  - { name: products, type: List<Product>, jsonKey: { defaultValue: [] } }
 
 - name: Product
-  properties:
+  fields:
   - { name: id, type: int? }
   - { name: name, type: String? }
+  - { name: type, type: ProductType, jsonKey: { defaultValue: ProductType.product } }
+
+enums:
+- name: ProductType
+  values:
+  - { name: product, jsonValue: { value: 0 } }
+  - { name: service, jsonValue: { value: 1 } }
+
+code: |
+  int _foo(String s) {
+    return 41;
+  }
+  
 ```
 
 The result of work:
 
-`example_objects.g.dart`
+`example_classes.g.dart`
 
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'example_objects.g.g.dart';
+part 'example_classes.g.g.dart';
 
 // **************************************************************************
 // build_it: build_it:json
 // **************************************************************************
 
-@JsonSerializable()
+@JsonSerializable(anyMap: true)
 class Category {
   Category({this.id, this.name, required this.products});
 
-  /// Creates an object from a JSON representation
+  /// Creates an instance of 'Category' from a JSON representation
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
 
@@ -254,15 +265,15 @@ class Category {
   @JsonKey(defaultValue: [])
   List<Product> products;
 
-  /// Returns a JSON representation of the object
+  /// Returns a JSON representation of the 'Category' instance.
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(anyMap: true)
 class Product {
-  Product({this.id, this.name});
+  Product({this.id, this.name, required this.type});
 
-  /// Creates an object from a JSON representation
+  /// Creates an instance of 'Product' from a JSON representation
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 
@@ -270,8 +281,22 @@ class Product {
 
   String? name;
 
-  /// Returns a JSON representation of the object
+  @JsonKey(defaultValue: ProductType.product)
+  ProductType type;
+
+  /// Returns a JSON representation of the 'Product' instance.
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+}
+
+enum ProductType {
+  @JsonValue(0)
+  product,
+  @JsonValue(1)
+  service
+}
+
+int _foo(String s) {
+  return 41;
 }
 
 ```
@@ -282,9 +307,9 @@ If you add the following dependencies to your project, then this generator will 
 ```yaml
 dependencies:
   json_annotation: ^4.0.0
-dev_dependencies:  
+dev_dependencies:
   build_it: ^0.2.3
-  json_serializable: ^4.0.2 
+  json_serializable: ^4.0.2
 ```
 
 Now everyone who adds dependencies will have access to this generator.  

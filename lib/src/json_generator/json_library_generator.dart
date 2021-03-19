@@ -5,21 +5,21 @@ part of '../json_generator.dart';
 class JsonLibraryGenerator extends Generator<void> {
   final List<Directive> directives;
 
-  final Library library;
+  final Library element;
 
   final List<Spec> specs;
 
   JsonLibraryGenerator(
       {@required this.directives,
-      @required this.library,
+      @required this.element,
       @required this.specs});
 
   @override
   void generate() {
     _addImportJsonAnnotation();
-    _addDirectives('export', library.exports);
-    _addDirectives('import', library.imports);
-    _addDirectives('part', library.parts);
+    _addDirectives('export', element.exports);
+    _addDirectives('import', element.imports);
+    _addDirectives('part', element.parts);
     _generateJsonClasses();
     _generateJsonEnums();
     _generateCode();
@@ -43,27 +43,24 @@ class JsonLibraryGenerator extends Generator<void> {
   }
 
   void _generateCode() {
-    if (library.code != null) {
-      specs.add(Code(library.code));
+    if (element.code != null) {
+      specs.add(const Code('\n'));
+      specs.add(Code(element.code));
     }
   }
 
   void _generateJsonClasses() {
-    final classes = library.classes;
+    final classes = element.classes;
     for (var i = 0; i < classes.length; i++) {
-      final element = classes[i];
-      final g = JsonClassGenerator(
-          clazz: element,
-          immutable: library.immutable,
-          index: i,
-          checkNullSafety: library.checkNullSafety);
+      final clazz = classes[i];
+      final g = JsonClassGenerator(element: clazz, index: i, parent: element);
       final result = g.generate();
       specs.add(result);
     }
   }
 
   void _generateJsonEnums() {
-    final enums = library.enums;
+    final enums = element.enums;
     for (var i = 0; i < enums.length; i++) {
       final element = enums[i];
       final g = JsonEnumGenerator(enum$: element, index: i);
