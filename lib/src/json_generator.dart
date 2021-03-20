@@ -8,7 +8,7 @@ import 'package:meta/meta.dart' hide literal;
 import 'package:path/path.dart' as _path;
 
 import 'generators.dart';
-import 'json_models/json_models.g.dart';
+import 'json_models.dart';
 
 part 'json_generator/json_class_generator.dart';
 part 'json_generator/json_enum_generator.dart';

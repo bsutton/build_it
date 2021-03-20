@@ -2,7 +2,7 @@
 format:
   name: build_it
   generator:
-    name: build_it:json_dev
+    name: build_it:json
 ---
 
 #checkNullSafety: true

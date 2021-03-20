@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'json_models.g.g.dart';
 
 // **************************************************************************
-// build_it: build_it:json_dev
+// build_it: build_it:json
 // **************************************************************************
 
 /// Class is used to describe the JSON class

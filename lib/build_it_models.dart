@@ -1,1 +1,1 @@
-export 'src/build_it_models/models.g.dart';
+export 'src/build_it_models.dart';

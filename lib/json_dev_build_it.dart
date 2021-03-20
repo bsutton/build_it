@@ -6,7 +6,7 @@ import 'package:analyzer/dart/ast/ast.dart' hide Directive;
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:build_it/build_it_helper.dart';
 import 'package:build_it/src/json_generator.dart';
-import 'package:build_it/src/json_models/json_models.g.dart';
+import 'package:build_it/src/json_models.dart';
 import 'package:build_it/src/text_splitter.dart';
 import 'package:json_helpers/json_helpers.dart';
 import 'package:meta/meta.dart';
@@ -21,12 +21,12 @@ Future<void> main(List<String> args, [message]) async {
 Future<BuildResult> _build(BuildConfig config) async {
   final library = config.data.json((e) => Library.fromJson(e));
   final directives = <Directive>[];
-  final g = JsonGenerator(
+  final generator = JsonGenerator(
       directives: directives,
       input: config.input,
       library: library,
       output: config.output);
-  final code = g.generate();
+  final code = generator.generate();
   return BuildResult(code: code, directives: directives, postBuildData: '');
 }
 
@@ -37,7 +37,7 @@ Future<void> _postBuild(PostBuildConfig config) async {
     path = _path.join(basePath, path);
     final file = File(path);
     if (!file.existsSync()) {
-      throw 'File not found: $path';
+      throw 'Unable to combine library into one file, file not found: $path';
     }
 
     return file.readAsStringSync();
@@ -78,8 +78,8 @@ Future<void> _postBuild(PostBuildConfig config) async {
   }
 
   final combiner = CodeCombiner(fileReader);
-  final content =
-      combiner.combine(_path.basename(input), postProcess: postProcess);
+  final basename = _path.basename(input);
+  final content = combiner.combine(basename, postProcess: postProcess);
   if (content == null) {
     throw StateError('Unable to combine file parts: $input');
   }

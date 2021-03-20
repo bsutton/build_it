@@ -1,3 +1,7 @@
+## 0.2.7
+
+- Added new generator `build_it:json_dev`, which works similarly to `build_it:json`, but it allows to combine the generated files into one file.
+
 ## 0.2.6
 
 - Fixed bugs with inconsistency in the generated code and the values of the `JsonSerializable` parameters

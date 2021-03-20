@@ -8,9 +8,13 @@ class CodeCombiner {
   String combine(String path,
       {FeatureSet? featureSet,
       List<Fragment> Function(CompilationUnit)? postProcess}) {
+    featureSet = featureSet ?? FeatureSet.latestLanguageVersion();
     final content = fileReader(path);
-    final parseResult =
-        parseString(content: content, path: path, featureSet: featureSet);
+    final parseResult = parseString(
+        content: content,
+        featureSet: featureSet,
+        path: path,
+        throwIfDiagnostics: false);
     final unit = parseResult.unit;
     final directives = <Directive>[];
     final visitor = DirectiveVisitor(directives);
@@ -41,8 +45,11 @@ class CodeCombiner {
     final parts = [part];
     for (final path in paths) {
       final content = fileReader(path);
-      final parseResult =
-          parseString(content: content, path: path, featureSet: featureSet);
+      final parseResult = parseString(
+          content: content,
+          featureSet: featureSet,
+          path: path,
+          throwIfDiagnostics: false);
       final unit = parseResult.unit;
       final directives = <Directive>[];
       final directiveVisitor = DirectiveVisitor(directives);
@@ -72,7 +79,8 @@ class CodeCombiner {
 
     var result = parts.join('');
     if (postProcess != null) {
-      final parseResult = parseString(content: result, featureSet: featureSet);
+      final parseResult = parseString(
+          content: result, featureSet: featureSet, throwIfDiagnostics: false);
       final unit = parseResult.unit;
       final fragments = postProcess(unit);
       final chunks = <Chunk>[Chunk(0, result)];

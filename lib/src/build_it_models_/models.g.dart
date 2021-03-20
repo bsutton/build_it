@@ -5,9 +5,10 @@ import 'package:json_annotation/json_annotation.dart';
 part 'models.g.g.dart';
 
 // **************************************************************************
-// build_it: build_it:json_dev
+// build_it: build_it:json
 // **************************************************************************
 
+// @build_it : combine_into_single_file
 /// Configuration passed to generators
 @JsonSerializable()
 class BuildConfig {
@@ -19,7 +20,7 @@ class BuildConfig {
       required this.metadata,
       required this.output});
 
-  /// Creates an instance of 'BuildConfig' from a JSON representation
+  /// Creates an object from a JSON representation
   factory BuildConfig.fromJson(Map<String, dynamic> json) =>
       _$BuildConfigFromJson(json);
 
@@ -41,7 +42,7 @@ class BuildConfig {
   /// Output file path
   final String output;
 
-  /// Returns a JSON representation of the 'BuildConfig' instance.
+  /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$BuildConfigToJson(this);
 }
 
@@ -55,7 +56,7 @@ class Directive {
       required this.type,
       required this.url});
 
-  /// Creates an instance of 'Directive' from a JSON representation
+  /// Creates an object from a JSON representation
   factory Directive.fromJson(Map<String, dynamic> json) =>
       _$DirectiveFromJson(json);
 
@@ -76,7 +77,7 @@ class Directive {
   /// Directive url
   final String url;
 
-  /// Returns a JSON representation of the 'Directive' instance.
+  /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$DirectiveToJson(this);
 }
 
@@ -85,7 +86,7 @@ class Directive {
 class BuildResult {
   BuildResult({this.code, this.directives, this.error, this.postBuildData});
 
-  /// Creates an instance of 'BuildResult' from a JSON representation
+  /// Creates an object from a JSON representation
   factory BuildResult.fromJson(Map<String, dynamic> json) =>
       _$BuildResultFromJson(json);
 
@@ -101,7 +102,7 @@ class BuildResult {
   /// If specified, a post build step with the specified value will be called
   final String? postBuildData;
 
-  /// Returns a JSON representation of the 'BuildResult' instance.
+  /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$BuildResultToJson(this);
 }
 
@@ -110,7 +111,7 @@ class BuildResult {
 class PostBuildConfig {
   PostBuildConfig({this.data, required this.input});
 
-  /// Creates an instance of 'PostBuildConfig' from a JSON representation
+  /// Creates an object from a JSON representation
   factory PostBuildConfig.fromJson(Map<String, dynamic> json) =>
       _$PostBuildConfigFromJson(json);
 
@@ -120,6 +121,6 @@ class PostBuildConfig {
   /// The parameter received by the post-builder
   final String input;
 
-  /// Returns a JSON representation of the 'PostBuildConfig' instance.
+  /// Returns a JSON representation of the object
   Map<String, dynamic> toJson() => _$PostBuildConfigToJson(this);
 }

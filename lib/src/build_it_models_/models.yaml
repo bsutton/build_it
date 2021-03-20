@@ -2,15 +2,15 @@
 format:
   name: build_it
   generator:
-    name: build_it:json_dev
+    name: build_it:json
 ---
 
 immutable: true
 
-classes:
+jsonObjects:
 - name: BuildConfig
   comments: "Configuration passed to generators"
-  fields:
+  properties:
   - name: combineParts
     type: bool?
     comments: "If true, one file without parts will also be built"
@@ -31,7 +31,7 @@ classes:
     comments: "Output file path"  
 
 - name: Directive
-  fields:
+  properties:
   - name: as
     type: String?
     comments: "Directive prefix"
@@ -52,7 +52,7 @@ classes:
 
 - name: BuildResult
   comments: "Used to return the result of the generation"
-  fields:
+  properties:
   - name: code
     comments: "Generated code, excluding directives"
     type: String?  
@@ -68,7 +68,7 @@ classes:
 
 - name: PostBuildConfig
   comments: "Post-build configuration that will be passed to the handler method"
-  fields:  
+  properties:  
   - name: data
     comments: "Input user to be processed by the handler"
     type: String?

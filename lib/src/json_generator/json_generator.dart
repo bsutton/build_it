@@ -19,9 +19,9 @@ class JsonGenerator {
 
   String generate() {
     final specs = <Spec>[];
-    final g = JsonLibraryGenerator(
+    final generator = JsonLibraryGenerator(
         directives: directives, element: library, specs: specs);
-    g.generate();
+    generator.generate();
     final fullPath = false;
     final basename = _path.basenameWithoutExtension(output);
     final segments = _path.split(output);
