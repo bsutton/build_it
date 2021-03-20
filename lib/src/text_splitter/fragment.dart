@@ -1,15 +1,17 @@
 part of '../text_splitter.dart';
 
-abstract class Fragment {
+class Fragment {
   int end;
 
   int start;
 
-  Fragment(this.start, this.end) {
+  String text;
+
+  Fragment(this.start, this.end, [this.text = '']) {
     RangeError.checkValueInInterval(start, 0, end, 'start');
   }
 
-  String asString();
+  String asString() => text;
 
   @override
   String toString() {

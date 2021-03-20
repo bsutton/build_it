@@ -6,5 +6,4 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'text_splitter.dart';
 
 part 'code_combiner/code_combiner.dart';
-part 'code_combiner/fragment.dart';
-part 'code_combiner/visitors.dart';
+part 'code_combiner/directive_visitor.dart';

@@ -1,16 +1,5 @@
 part of '../code_combiner.dart';
 
-class AnnotationVisitor extends RecursiveAstVisitor {
-  final List<Annotation> annotations;
-
-  AnnotationVisitor(this.annotations);
-
-  @override
-  void visitAnnotation(Annotation node) {
-    annotations.add(node);
-  }
-}
-
 class DirectiveVisitor extends RecursiveAstVisitor {
   final List<Directive> directives;
 

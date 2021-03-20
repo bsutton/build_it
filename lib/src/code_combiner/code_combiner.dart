@@ -5,7 +5,9 @@ class CodeCombiner {
 
   CodeCombiner(this.fileReader);
 
-  String combine(String path, {FeatureSet? featureSet}) {
+  String combine(String path,
+      {FeatureSet? featureSet,
+      List<Fragment> Function(CompilationUnit)? postProcess}) {
     final content = fileReader(path);
     final parseResult =
         parseString(content: content, path: path, featureSet: featureSet);
@@ -14,12 +16,12 @@ class CodeCombiner {
     final visitor = DirectiveVisitor(directives);
     unit.accept(visitor);
     final paths = <String>[];
-    final fragments = <_Fragment>[];
+    final fragments = <Fragment>[];
     for (final directive in directives) {
       if (directive is PartDirective) {
         final offset = directive.offset;
         final end = directive.end;
-        final fragment = _Fragment(offset, end, '');
+        final fragment = Fragment(offset, end, '');
         fragments.add(fragment);
         final path = directive.uri.stringValue!;
         paths.add(path);
@@ -45,12 +47,12 @@ class CodeCombiner {
       final directives = <Directive>[];
       final directiveVisitor = DirectiveVisitor(directives);
       unit.accept(directiveVisitor);
-      final fragments = <_Fragment>[];
+      final fragments = <Fragment>[];
       for (final directive in directives) {
         if (directive is PartOfDirective) {
           final start = directive.offset;
           final end = directive.end;
-          final fragment = _Fragment(start, end, '');
+          final fragment = Fragment(start, end, '');
           fragments.add(fragment);
         }
       }
@@ -68,7 +70,24 @@ class CodeCombiner {
       parts.add(part);
     }
 
-    return parts.join('');
+    var result = parts.join('');
+    if (postProcess != null) {
+      final parseResult = parseString(content: result, featureSet: featureSet);
+      final unit = parseResult.unit;
+      final fragments = postProcess(unit);
+      final chunks = <Chunk>[Chunk(0, result)];
+      final textSplitter = TextSplitter();
+      final error = textSplitter.split(chunks, fragments);
+      if (error != null) {
+        _error(error);
+      }
+
+      result = chunks
+          .map((e) => e.fragment == null ? e.text : e.fragment!.asString())
+          .join();
+    }
+
+    return result;
   }
 
   Never _error(TextSplitterError error) {
