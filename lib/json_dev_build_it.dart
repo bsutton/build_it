@@ -49,6 +49,7 @@ Future<void> _postBuild(PostBuildConfig config) async {
     final visitor = _Visitor(annotations: annotations, directives: directives);
     unit.accept(visitor);
     final fragments = <Fragment>[];
+    /*
     for (final directive in directives) {
       if (directive.uri.stringValue ==
           'package:json_annotation/json_annotation.dart') {
@@ -58,6 +59,7 @@ Future<void> _postBuild(PostBuildConfig config) async {
         fragments.add(fragment);
       }
     }
+    */
 
     for (final annotation in annotations) {
       final name = annotation.name;
