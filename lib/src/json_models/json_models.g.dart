@@ -9,7 +9,7 @@ part 'json_models.g.g.dart';
 // **************************************************************************
 
 /// Class is used to describe the JSON class
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class Class {
   Class(
       {required this.annotations,
@@ -47,7 +47,7 @@ class Class {
 }
 
 /// Enum is used to describe the JSON enum
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class Enum {
   Enum(
       {required this.annotations,
@@ -77,7 +77,7 @@ class Enum {
 }
 
 /// Enum value is used to describe the JSON enum value
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class EnumValue {
   EnumValue(
       {required this.annotations,
@@ -107,7 +107,7 @@ class EnumValue {
 }
 
 /// Field is used to describe the JSON class field
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class Field {
   Field(
       {required this.annotations,
@@ -140,7 +140,7 @@ class Field {
 }
 
 /// Represents annotation JsonKey
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class JsonKeyAnnotation {
   JsonKeyAnnotation(
       {this.defaultValue,
@@ -182,7 +182,7 @@ class JsonKeyAnnotation {
 }
 
 /// Represents annotation JsonSerializable
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class JsonSerializableAnnotation {
   JsonSerializableAnnotation(
       {this.anyMap,
@@ -225,7 +225,7 @@ class JsonSerializableAnnotation {
 }
 
 /// Represents annotation JsonValue
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class JsonValueAnnotation {
   JsonValueAnnotation({required this.value});
 
@@ -240,7 +240,7 @@ class JsonValueAnnotation {
 }
 
 /// Library is used to describe the JSON library
-@JsonSerializable()
+@JsonSerializable(disallowUnrecognizedKeys: true)
 class Library {
   Library(
       {this.checkNullSafety,

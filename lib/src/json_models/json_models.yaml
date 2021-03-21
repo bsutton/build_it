@@ -6,6 +6,8 @@ format:
 ---
 
 #checkNullSafety: true
+jsonSerializable:
+  disallowUnrecognizedKeys: true
 
 classes:
 - name: Class

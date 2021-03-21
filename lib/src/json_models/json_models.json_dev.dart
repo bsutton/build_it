@@ -1,5 +1,8 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+import 'package:json_annotation/json_annotation.dart';
+
+
 // **************************************************************************
 // build_it: build_it:json_dev
 // **************************************************************************
@@ -18,13 +21,13 @@ class Class {
   factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
 
   /// Metadata describing the JSON class
-  List<String> annotations;
+    List<String> annotations;
 
   /// Documenting comments for JSON class
   String? comments;
 
   /// List of JSON fields
-  List<Field> fields;
+    List<Field> fields;
 
   /// Indicates the immutability of class fields
   bool? immutable;
@@ -51,7 +54,7 @@ class Enum {
   factory Enum.fromJson(Map<String, dynamic> json) => _$EnumFromJson(json);
 
   /// Metadata describing the JSON enum
-  List<String> annotations;
+    List<String> annotations;
 
   /// Documenting comments for JSON enum
   String? comments;
@@ -60,7 +63,7 @@ class Enum {
   String? name;
 
   /// List of enumeration values
-  List<EnumValue> values;
+    List<EnumValue> values;
 
   /// Returns a JSON representation of the 'Enum' instance.
   Map<String, dynamic> toJson() => _$EnumToJson(this);
@@ -79,7 +82,7 @@ class EnumValue {
       _$EnumValueFromJson(json);
 
   /// Metadata describing the JSON enum value
-  List<String> annotations;
+    List<String> annotations;
 
   /// Documenting comments for JSON enum value
   String? comments;
@@ -107,7 +110,7 @@ class Field {
   factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
   /// Metadata describing the JSON class field
-  List<String> annotations;
+    List<String> annotations;
 
   /// Documenting comments for JSON class field
   String? comments;
@@ -146,7 +149,7 @@ class JsonKeyAnnotation {
 
   bool? disallowNullValue;
 
-  String? fromJson$;
+    String? fromJson$;
 
   bool? ignore;
 
@@ -156,7 +159,7 @@ class JsonKeyAnnotation {
 
   bool? required;
 
-  String? toJson$;
+    String? toJson$;
 
   Object? unknownEnumValue;
 
@@ -241,39 +244,48 @@ class Library {
   bool? checkNullSafety;
 
   /// List of JSON classes
-  List<Class> classes;
+    List<Class> classes;
 
   /// Source code to be inserted into the library
   String? code;
 
   /// List of JSON enums
-  List<Enum> enums;
+    List<Enum> enums;
 
   /// List of export directives
-  List<String> exports;
+    List<String> exports;
 
   /// Indicates immutability
   bool? immutable;
 
   /// List of import directives
-  List<String> imports;
+    List<String> imports;
 
   /// Default values for annotation JsonSerializable
   JsonSerializableAnnotation? jsonSerializable;
 
   /// List of part directives
-  List<String> parts;
+    List<String> parts;
 
   /// Returns a JSON representation of the 'Library' instance.
   Map<String, dynamic> toJson() => _$LibraryToJson(this);
 }
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
 Class _$ClassFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const [
+    'annotations',
+    'comments',
+    'fields',
+    'immutable',
+    'jsonSerializable',
+    'name'
+  ]);
   return Class(
     annotations: (json['annotations'] as List<dynamic>?)
             ?.map((e) => e as String)
@@ -303,6 +315,8 @@ Map<String, dynamic> _$ClassToJson(Class instance) => <String, dynamic>{
     };
 
 Enum _$EnumFromJson(Map<String, dynamic> json) {
+  $checkKeys(json,
+      allowedKeys: const ['annotations', 'comments', 'name', 'values']);
   return Enum(
     annotations: (json['annotations'] as List<dynamic>?)
             ?.map((e) => e as String)
@@ -325,6 +339,8 @@ Map<String, dynamic> _$EnumToJson(Enum instance) => <String, dynamic>{
     };
 
 EnumValue _$EnumValueFromJson(Map<String, dynamic> json) {
+  $checkKeys(json,
+      allowedKeys: const ['annotations', 'comments', 'jsonValue', 'name']);
   return EnumValue(
     annotations: (json['annotations'] as List<dynamic>?)
             ?.map((e) => e as String)
@@ -347,6 +363,13 @@ Map<String, dynamic> _$EnumValueToJson(EnumValue instance) => <String, dynamic>{
     };
 
 Field _$FieldFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const [
+    'annotations',
+    'comments',
+    'jsonKey',
+    'name',
+    'type'
+  ]);
   return Field(
     annotations: (json['annotations'] as List<dynamic>?)
             ?.map((e) => e as String)
@@ -370,6 +393,17 @@ Map<String, dynamic> _$FieldToJson(Field instance) => <String, dynamic>{
     };
 
 JsonKeyAnnotation _$JsonKeyAnnotationFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const [
+    'defaultValue',
+    'disallowNullValue',
+    'fromJson',
+    'ignore',
+    'includeIfNull',
+    'name',
+    'required',
+    'toJson',
+    'unknownEnumValue'
+  ]);
   return JsonKeyAnnotation(
     defaultValue: json['defaultValue'],
     disallowNullValue: json['disallowNullValue'] as bool?,
@@ -398,6 +432,18 @@ Map<String, dynamic> _$JsonKeyAnnotationToJson(JsonKeyAnnotation instance) =>
 
 JsonSerializableAnnotation _$JsonSerializableAnnotationFromJson(
     Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const [
+    'anyMap',
+    'checked',
+    'createFactory',
+    'createToJson',
+    'disallowUnrecognizedKeys',
+    'explicitToJson',
+    'fieldRename',
+    'genericArgumentFactories',
+    'ignoreUnannotated',
+    'includeIfNull'
+  ]);
   return JsonSerializableAnnotation(
     anyMap: json['anyMap'] as bool?,
     checked: json['checked'] as bool?,
@@ -428,6 +474,7 @@ Map<String, dynamic> _$JsonSerializableAnnotationToJson(
     };
 
 JsonValueAnnotation _$JsonValueAnnotationFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const ['value']);
   return JsonValueAnnotation(
     value: json['value'] as Object,
   );
@@ -440,6 +487,17 @@ Map<String, dynamic> _$JsonValueAnnotationToJson(
     };
 
 Library _$LibraryFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const [
+    'checkNullSafety',
+    'classes',
+    'code',
+    'enums',
+    'exports',
+    'immutable',
+    'imports',
+    'jsonSerializable',
+    'parts'
+  ]);
   return Library(
     checkNullSafety: json['checkNullSafety'] as bool?,
     classes: (json['classes'] as List<dynamic>?)
