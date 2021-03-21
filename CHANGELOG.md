@@ -1,3 +1,7 @@
+## 0.2.8
+
+- Fixed bug in `DirectiveExtension.asString()` with incorrect representation of the directive when `hide` or` show` is not null but empty
+
 ## 0.2.7
 
 - Added new generator `build_it:json_dev`, which works similarly to `build_it:json`, but it allows to combine the generated files into one file.
