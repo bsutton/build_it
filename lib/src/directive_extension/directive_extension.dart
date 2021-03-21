@@ -54,12 +54,12 @@ extension DirectiveExtension on Directive {
       sb.write(as);
     }
 
-    if (hide != null) {
+    if (hide != null && hide!.isNotEmpty) {
       sb.write(' hide ');
       sb.write(hide!.join(', '));
     }
 
-    if (show != null) {
+    if (show != null && show!.isNotEmpty) {
       sb.write(' show ');
       sb.write(show!.join(', '));
     }
