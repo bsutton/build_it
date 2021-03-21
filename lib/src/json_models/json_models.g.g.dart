@@ -215,7 +215,7 @@ Map<String, dynamic> _$JsonValueAnnotationToJson(
       'value': instance.value,
     };
 
-Library _$LibraryFromJson(Map<String, dynamic> json) {
+Root _$RootFromJson(Map<String, dynamic> json) {
   $checkKeys(json, allowedKeys: const [
     'checkNullSafety',
     'classes',
@@ -227,7 +227,7 @@ Library _$LibraryFromJson(Map<String, dynamic> json) {
     'jsonSerializable',
     'parts'
   ]);
-  return Library(
+  return Root(
     checkNullSafety: json['checkNullSafety'] as bool?,
     classes: (json['classes'] as List<dynamic>?)
             ?.map((e) => Class.fromJson(e as Map<String, dynamic>))
@@ -255,7 +255,7 @@ Library _$LibraryFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$LibraryToJson(Library instance) => <String, dynamic>{
+Map<String, dynamic> _$RootToJson(Root instance) => <String, dynamic>{
       'checkNullSafety': instance.checkNullSafety,
       'classes': instance.classes,
       'code': instance.code,

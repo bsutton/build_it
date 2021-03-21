@@ -2,7 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-
 // **************************************************************************
 // build_it: build_it:json_dev
 // **************************************************************************
@@ -119,7 +118,6 @@ class PostBuildConfig {
   Map<String, dynamic> toJson() => _$PostBuildConfigToJson(this);
 }
 // GENERATED CODE - DO NOT MODIFY BY HAND
-
 
 // **************************************************************************
 // JsonSerializableGenerator

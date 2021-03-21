@@ -2,7 +2,7 @@
 
 import 'package:build_it/build_it_models.dart';
 import 'package:code_builder/code_builder.dart'
-    hide Class, Directive, Enum, EnumValue, Field, Library;
+    hide Class, Directive, Enum, EnumValue, Field;
 import 'package:code_builder/code_builder.dart' as _code_builder;
 import 'package:meta/meta.dart' hide literal;
 import 'package:path/path.dart' as _path;

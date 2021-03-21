@@ -5,7 +5,7 @@ part of '../json_generator.dart';
 class JsonLibraryGenerator extends Generator<void> {
   final List<Directive> directives;
 
-  final Library element;
+  final Root element;
 
   final List<Spec> specs;
 

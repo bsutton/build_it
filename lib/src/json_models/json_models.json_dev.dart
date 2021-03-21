@@ -2,7 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-
 // **************************************************************************
 // build_it: build_it:json_dev
 // **************************************************************************
@@ -21,13 +20,13 @@ class Class {
   factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
 
   /// Metadata describing the JSON class
-    List<String> annotations;
+  List<String> annotations;
 
   /// Documenting comments for JSON class
   String? comments;
 
   /// List of JSON fields
-    List<Field> fields;
+  List<Field> fields;
 
   /// Indicates the immutability of class fields
   bool? immutable;
@@ -54,7 +53,7 @@ class Enum {
   factory Enum.fromJson(Map<String, dynamic> json) => _$EnumFromJson(json);
 
   /// Metadata describing the JSON enum
-    List<String> annotations;
+  List<String> annotations;
 
   /// Documenting comments for JSON enum
   String? comments;
@@ -63,7 +62,7 @@ class Enum {
   String? name;
 
   /// List of enumeration values
-    List<EnumValue> values;
+  List<EnumValue> values;
 
   /// Returns a JSON representation of the 'Enum' instance.
   Map<String, dynamic> toJson() => _$EnumToJson(this);
@@ -82,7 +81,7 @@ class EnumValue {
       _$EnumValueFromJson(json);
 
   /// Metadata describing the JSON enum value
-    List<String> annotations;
+  List<String> annotations;
 
   /// Documenting comments for JSON enum value
   String? comments;
@@ -110,7 +109,7 @@ class Field {
   factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
   /// Metadata describing the JSON class field
-    List<String> annotations;
+  List<String> annotations;
 
   /// Documenting comments for JSON class field
   String? comments;
@@ -149,7 +148,7 @@ class JsonKeyAnnotation {
 
   bool? disallowNullValue;
 
-    String? fromJson$;
+  String? fromJson$;
 
   bool? ignore;
 
@@ -159,7 +158,7 @@ class JsonKeyAnnotation {
 
   bool? required;
 
-    String? toJson$;
+  String? toJson$;
 
   Object? unknownEnumValue;
 
@@ -223,9 +222,9 @@ class JsonValueAnnotation {
   Map<String, dynamic> toJson() => _$JsonValueAnnotationToJson(this);
 }
 
-/// Library is used to describe the JSON library
-class Library {
-  Library(
+/// Root is used to describe the configuration
+class Root {
+  Root(
       {this.checkNullSafety,
       required this.classes,
       this.code,
@@ -236,42 +235,40 @@ class Library {
       this.jsonSerializable,
       required this.parts});
 
-  /// Creates an instance of 'Library' from a JSON representation
-  factory Library.fromJson(Map<String, dynamic> json) =>
-      _$LibraryFromJson(json);
+  /// Creates an instance of 'Root' from a JSON representation
+  factory Root.fromJson(Map<String, dynamic> json) => _$RootFromJson(json);
 
   /// Indicates the need for a null safety check during code generation
   bool? checkNullSafety;
 
   /// List of JSON classes
-    List<Class> classes;
+  List<Class> classes;
 
   /// Source code to be inserted into the library
   String? code;
 
   /// List of JSON enums
-    List<Enum> enums;
+  List<Enum> enums;
 
   /// List of export directives
-    List<String> exports;
+  List<String> exports;
 
   /// Indicates immutability
   bool? immutable;
 
   /// List of import directives
-    List<String> imports;
+  List<String> imports;
 
   /// Default values for annotation JsonSerializable
   JsonSerializableAnnotation? jsonSerializable;
 
   /// List of part directives
-    List<String> parts;
+  List<String> parts;
 
-  /// Returns a JSON representation of the 'Library' instance.
-  Map<String, dynamic> toJson() => _$LibraryToJson(this);
+  /// Returns a JSON representation of the 'Root' instance.
+  Map<String, dynamic> toJson() => _$RootToJson(this);
 }
 // GENERATED CODE - DO NOT MODIFY BY HAND
-
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -486,7 +483,7 @@ Map<String, dynamic> _$JsonValueAnnotationToJson(
       'value': instance.value,
     };
 
-Library _$LibraryFromJson(Map<String, dynamic> json) {
+Root _$RootFromJson(Map<String, dynamic> json) {
   $checkKeys(json, allowedKeys: const [
     'checkNullSafety',
     'classes',
@@ -498,7 +495,7 @@ Library _$LibraryFromJson(Map<String, dynamic> json) {
     'jsonSerializable',
     'parts'
   ]);
-  return Library(
+  return Root(
     checkNullSafety: json['checkNullSafety'] as bool?,
     classes: (json['classes'] as List<dynamic>?)
             ?.map((e) => Class.fromJson(e as Map<String, dynamic>))
@@ -526,7 +523,7 @@ Library _$LibraryFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$LibraryToJson(Library instance) => <String, dynamic>{
+Map<String, dynamic> _$RootToJson(Root instance) => <String, dynamic>{
       'checkNullSafety': instance.checkNullSafety,
       'classes': instance.classes,
       'code': instance.code,

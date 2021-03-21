@@ -239,10 +239,10 @@ class JsonValueAnnotation {
   Map<String, dynamic> toJson() => _$JsonValueAnnotationToJson(this);
 }
 
-/// Library is used to describe the JSON library
+/// Root is used to describe the configuration
 @JsonSerializable(disallowUnrecognizedKeys: true)
-class Library {
-  Library(
+class Root {
+  Root(
       {this.checkNullSafety,
       required this.classes,
       this.code,
@@ -253,9 +253,8 @@ class Library {
       this.jsonSerializable,
       required this.parts});
 
-  /// Creates an instance of 'Library' from a JSON representation
-  factory Library.fromJson(Map<String, dynamic> json) =>
-      _$LibraryFromJson(json);
+  /// Creates an instance of 'Root' from a JSON representation
+  factory Root.fromJson(Map<String, dynamic> json) => _$RootFromJson(json);
 
   /// Indicates the need for a null safety check during code generation
   bool? checkNullSafety;
@@ -289,6 +288,6 @@ class Library {
   @JsonKey(defaultValue: [])
   List<String> parts;
 
-  /// Returns a JSON representation of the 'Library' instance.
-  Map<String, dynamic> toJson() => _$LibraryToJson(this);
+  /// Returns a JSON representation of the 'Root' instance.
+  Map<String, dynamic> toJson() => _$RootToJson(this);
 }

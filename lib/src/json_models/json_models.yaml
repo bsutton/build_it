@@ -151,8 +151,8 @@ classes:
   - name: value
     type: Object
 
-- name: Library
-  comments: "Library is used to describe the JSON library"
+- name: Root
+  comments: "Root is used to describe the configuration"
   fields:
   - name: checkNullSafety
     type: bool?

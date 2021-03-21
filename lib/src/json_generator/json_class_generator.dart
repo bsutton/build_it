@@ -8,7 +8,7 @@ class JsonClassGenerator extends Generator<_code_builder.Class>
 
   final int index;
 
-  final Library parent;
+  final Root parent;
 
   JsonClassGenerator(
       {@required this.element, @required this.index, @required this.parent});

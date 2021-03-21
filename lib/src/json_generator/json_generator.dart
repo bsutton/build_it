@@ -7,20 +7,20 @@ class JsonGenerator {
 
   final String input;
 
-  final Library library;
-
   final String output;
+
+  final Root root;
 
   JsonGenerator(
       {@required this.directives,
       @required this.input,
-      @required this.library,
-      @required this.output});
+      @required this.output,
+      @required this.root});
 
   String generate() {
     final specs = <Spec>[];
     final generator = JsonLibraryGenerator(
-        directives: directives, element: library, specs: specs);
+        directives: directives, element: root, specs: specs);
     generator.generate();
     final fullPath = false;
     final basename = _path.basenameWithoutExtension(output);
@@ -33,12 +33,12 @@ class JsonGenerator {
 
     final partDirective = Directive(type: 'part', url: path);
     directives.add(partDirective);
-    final library$ = _code_builder.Library((libraryBuilder) {
+    final library = _code_builder.Library((libraryBuilder) {
       libraryBuilder.body.addAll(specs);
     });
 
     final emitter = DartEmitter(Allocator.simplePrefixing());
-    final result = '${library$.accept(emitter)}';
+    final result = '${library.accept(emitter)}';
     return result;
   }
 }

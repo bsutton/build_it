@@ -10,13 +10,13 @@ Future<void> main(List<String> args, [message]) async {
 }
 
 Future<BuildResult> _build(BuildConfig config) async {
-  final library = config.data.json((e) => Library.fromJson(e));
+  final root = config.data.json((e) => Root.fromJson(e));
   final directives = <Directive>[];
   final generator = JsonGenerator(
       directives: directives,
       input: config.input,
-      library: library,
-      output: config.output);
+      output: config.output,
+      root: root);
   final code = generator.generate();
   return BuildResult(code: code, directives: directives);
 }
